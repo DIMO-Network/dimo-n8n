@@ -1,7 +1,9 @@
-import { 
-    type INodeType, 
-    type INodeTypeDescription, 
-    NodeConnectionType
+import {
+	IDataObject,
+	INodeExecutionData,
+	INodeType,
+	INodeTypeDescription,
+	IExecuteFunctions
 } from 'n8n-workflow';
 
 export class Dimo implements INodeType {
