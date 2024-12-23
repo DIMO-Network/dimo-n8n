@@ -1,83 +1,74 @@
+// import { ethers } from 'ethers';
 import {
-	IDataObject,
-	INodeExecutionData,
-	INodeType,
-	INodeTypeDescription,
-	IExecuteFunctions
+  // IExecuteFunctions,
+  INodeType,
+  INodeTypeDescription,
 } from 'n8n-workflow';
 
 export class Dimo implements INodeType {
-    description: INodeTypeDescription = {
-        displayName: 'DIMO',
-        name: 'dimo',
-        version: 1,
-        icon: 'file:Dimo.svg',
-        group: ['input'],
-		description: 'DIMO API',
-        defaults: {
-			name: 'DIMO',
-		},
-        inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
-        properties: [
-            {
-				displayName: 'Resource',
-				name: 'resource',
-				type: 'options',
-				noDataExpression: true,
-				options: [
-					{
-						name: 'Attestation',
-						value: 'attestation',
-					},
-					{
-						name: 'Auth',
-						value: 'auth',
-					},
-					{
-						name: 'DeviceData',
-						value: 'deviceData',
-					},
-					{
-						name: 'DeviceDefinitions',
-						value: 'deviceDefinitions',
-					},
-					{
-						name: 'Devices',
-						value: 'devices',
-					},
-                    {
-						name: 'Identity',
-						value: 'identity',
-					},
-                    {
-						name: 'Telemetry',
-						value: 'telemetry',
-					},
-					{
-						name: 'TokenExchange',
-						value: 'tokenExchange',
-					},
-					{
-						name: 'Trips',
-						value: 'trips',
-					},
-					{
-						name: 'User',
-						value: 'user',
-					},
-					{
-						name: 'Valuations',
-						value: 'valuations',
-					},
-                    {
-						name: 'VehicleSignalDecoding',
-						value: 'vehicleSignalDecoding',
-					},
-				],
-				default: 'auth',
-				description: 'The resource to perform operations on',
-			},
-        ]
-    }
+  description: INodeTypeDescription = {
+    displayName: 'DIMO',
+    name: 'dimo',
+    icon: 'file:dimo.svg',
+    group: ['transform'],
+    version: 1,
+    description: 'Interact with the DIMO API',
+    defaults: {
+      name: 'DIMO',
+    },
+    inputs: ['main'],
+    outputs: ['main'],
+    credentials: [
+      {
+        name: 'dimoApi',
+        required: true,
+      },
+    ],
+    properties: [
+      {
+        displayName: 'Operation',
+        name: 'operation',
+        type: 'options',
+        noDataExpression: true,
+        options: [
+          {
+            name: 'Get Developer JWT',
+            value: 'getDeveloperJwt',
+          },
+          {
+            name: 'Get Vehicle JWT',
+            value: 'getVehicleJwt',
+          }
+        ],
+        default: 'getDeveloperJwt',
+      },
+      {
+        displayName: 'Token ID',
+        name: 'tokenId',
+        type: 'number',
+        displayOptions: {
+          show: {
+            operation: ['getVehicleJwt'],
+          },
+        },
+        default: 0,
+        description: 'The token ID of the vehicle',
+        required: true,
+      },
+      {
+        displayName: 'Privileges',
+        name: 'privileges',
+        type: 'string',
+        displayOptions: {
+          show: {
+            operation: ['getVehicleJwt'],
+          },
+        },
+        default: '',
+        description: 'Comma-separated list of privileges',
+        required: true,
+      }
+    ],
+  };
+
 }
