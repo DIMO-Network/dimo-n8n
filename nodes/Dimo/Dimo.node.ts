@@ -3,10 +3,7 @@ import {
   INodeType,
   INodeTypeDescription,
   NodeOperationError,
-  IHttpRequestOptions,
   INodeExecutionData,
-	// ApplicationError,
-	// NodeApiError,
 } from 'n8n-workflow';
 import { ethers } from 'ethers';
 
@@ -50,7 +47,12 @@ export class Dimo implements INodeType {
           {
             name: 'Get Vehicle JWT',
             value: 'getVehicleJwt',
-          }
+          },
+					// TODO (Barrett): Remove testing
+					{
+						name: 'Attestation',
+						value: 'getVinVc'
+					}
         ],
         default: 'getDeveloperJwt',
       },
@@ -185,109 +187,171 @@ export class Dimo implements INodeType {
 				}
 			}
       // Get Vehicle JWT
-			// TODO (BARRETT): NEED TO FIX VEHICLEJWT WITH FIXES IN DEV JWT
       else if (operation === 'getVehicleJwt') {
         const tokenId = this.getNodeParameter('tokenId', 0) as number;
         const privilegesString = this.getNodeParameter('privileges', 0) as string;
-        const privileges = privilegesString.split(',').map(p => p.trim());
+				const privileges = privilegesString
+					.split(',')
+					.map(p => parseInt(p.trim(), 10));
 
-        const formParams = new URLSearchParams({
-          client_id: clientId,
-          domain: domain,
-          scope: 'openid email',
-          response_type: 'code',
-          address: clientId
-        });
+				if (privileges.some(isNaN)) {
+					throw new NodeOperationError(
+						this.getNode(),
+						'All privileges must be valid numbers'
+					);
+				}
 
-        const challengeResponse = await this.helpers.request({
-          method: 'POST',
-          url: `${basePath}/auth/web3/generate_challenge`,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'User-Agent': 'dimo-n8n'
-          },
-          body: formParams.toString()
-        });
+				if (!domain.startsWith('http://') && !domain.startsWith('https://')) {
+					throw new NodeOperationError(
+						this.getNode(),
+						'Domain must include protocol (e.g., http:// or https://)'
+					);
+				}
 
+				const devJwtRequestBody = new URLSearchParams({
+					client_id: clientId,
+					domain: domain,
+					scope: 'openid email',
+					response_type: 'code',
+					address: clientId
+				}).toString();
 
-        const wallet = new ethers.Wallet(credentials.privateKey);
-        const signature = await wallet.signMessage(challengeResponse.challenge);
+				try {
+					const challengeResponse = await this.helpers.request({
+						method: 'POST',
+						url: `${basePath}/auth/web3/generate_challenge`,
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded',
+							'Accept': 'application/json',
+							'User-Agent': 'dimo-n8n'
+						},
+						body: devJwtRequestBody,
+					});
 
+					const parsedResponse = typeof challengeResponse === 'string'
+						? JSON.parse(challengeResponse)
+						: challengeResponse;
 
-        const submitParams = new URLSearchParams({
-          client_id: credentials.clientId.toLowerCase(),
-          domain: domain,
-          state: challengeResponse.state,
-          signature,
-          grant_type: 'authorization_code'
-        });
+					if (!parsedResponse?.challenge) {
+						throw new NodeOperationError(this.getNode(), "No challenge received in response.");
+					}
 
-        const devJwtResponse = await this.helpers.request({
-          method: 'POST',
-          url: `${basePath}/auth/web3/submit_challenge`,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'User-Agent': 'dimo-n8n'
-          },
-          body: submitParams.toString()
-        });
+					let privateKey = credentials.privateKey;
+					if (!privateKey.startsWith('0x')) {
+						privateKey = '0x' + privateKey;
+					}
 
-        const developerJwt = devJwtResponse.access_token;
+					const wallet = new ethers.Wallet(privateKey);
 
-        // Use Developer JWT to get Vehicle JWT
-        const vehicleOptions: IHttpRequestOptions = {
-          method: 'POST',
-          url: 'https://token-exchange-api.dimo.zone/v1/tokens/exchange',
-          headers: {
-            'Authorization': `Bearer ${developerJwt}`,
-            'Content-Type': 'application/json',
-          },
-          body: {
-            nftContractAddress: credentials.environment === 'Dev'
-              ? '0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8'
-              : '0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF',
-            privileges,
-            tokenId,
-          },
-          json: true,
-        };
+					const signature = await wallet.signMessage(parsedResponse.challenge);
 
-        const vehicleResponse = await this.helpers.request(vehicleOptions);
+					const submitBody = `client_id=${credentials.clientId}&domain=${encodeURIComponent(domain)}&state=${parsedResponse.state}&signature=${signature}&grant_type=authorization_code`;
 
-        returnData.push({
-          json: {
-            vehicle_jwt: vehicleResponse.vehicle_jwt,
-            developer_jwt: developerJwt,
-            token_id: tokenId,
-            privileges: privileges
-          }
-        });
-      }
+					const devJwtResponse = await this.helpers.request({
+						method: 'POST',
+						url: `${basePath}/auth/web3/submit_challenge`,
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded',
+							// TODO: FIX/REMOVE
+							// 'Accept': 'application/json',
+							'User-Agent': 'dimo-n8n'
+						},
+						body: submitBody,
+					});
 
-      return [returnData];
+					const parsedDevJwtResponse = typeof devJwtResponse === 'string'
+					? JSON.parse(devJwtResponse)
+					: devJwtResponse;
 
-    } catch (error) {
-      console.error('Full error details:', {
-				// TODO (BARRETT): REMOVE BEFORE PUBLISH - DEBUGGING
-        name: error.name,
-        message: error.message,
-        response: error.response?.body || error.response?.data,
-        stack: error.stack
-      });
+					const nftAddress = environment === 'Dev'
+						? '0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8'
+      			: '0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF';
 
-      if (error instanceof NodeOperationError) {
-        throw error;
-      }
+					//TODO: REMOVE CONSOLE LOG
+					console.log('Vehicle JWT Request:', {
+						url: 'https://token-exchange-api.dimo.zone/v1/tokens/exchange',
+						tokenId: Number(tokenId),
+						privilegesType: typeof privileges,
+						privileges: privileges,
+						nftAddress: nftAddress
+					});
+					//TODO: REMOVE CONSOLE LOG
+					if (!Array.isArray(privileges) || privileges.length === 0) {
+						throw new NodeOperationError(
+							this.getNode(),
+							'Privileges must be a non-empty array'
+						);
+					}
 
-      throw new NodeOperationError(
-        this.getNode(),
-        `DIMO API error: ${error.message}`,
-        {
-          description: error.response?.body || error.response?.data
-            ? JSON.stringify(error.response.body || error.response.data)
-            : undefined
-        }
-      );
-    }
+					//TODO: REMOVE CONSOLE LOG
+					if (!Number.isInteger(Number(tokenId)) || Number(tokenId) <= 0) {
+						throw new NodeOperationError(
+							this.getNode(),
+							'Token ID must be a positive integer'
+						);
+					}
+
+					const vehicleJwtResponse = await this.helpers.request({
+						method: 'POST',
+						url: 'https://token-exchange-api.dimo.zone/v1/tokens/exchange',
+						headers: {
+							'Authorization': `Bearer ${parsedDevJwtResponse.access_token}`,
+							'Content-Type': 'application/json',
+							'User-Agent': 'dimo-n8n'
+						},
+						body: {
+							nftContractAddress: nftAddress,
+							privileges,
+							tokenId
+						},
+					});
+
+					const parsedVehicleJwtResponse = typeof vehicleJwtResponse === 'string'
+						? JSON.parse(vehicleJwtResponse)
+						: vehicleJwtResponse;
+
+											//TODO: REMOVE CONSOLE LOG
+
+					console.log('Vehicle JWT Response:', {
+						success_vehicle_jwt: Boolean(parsedVehicleJwtResponse?.token),
+						responseType: typeof parsedVehicleJwtResponse
+					});
+
+					returnData.push({
+						json: {
+							//TODO (BARRETT): Return any other data here?
+							// Include dev jwt or keep things streamlined?
+							vehicle_jwt: parsedVehicleJwtResponse.token,
+							// developer_jwt:parsedDevJwtResponse.access_token
+						}
+					});
+
+				} catch (error) {
+					console.error('Error details:', {
+						message: error.message,
+						statusCode: error.response?.statusCode,
+						body: typeof error.response?.body === 'string'
+							? error.response.body.substring(0, 500)
+							: 'No response body'
+					});
+
+					throw new NodeOperationError(
+						this.getNode(),
+						`Authentication failed: ${error.message}`
+					);
+    		}
   }
+
+	return [returnData]
+} catch (error) {
+	console.error('Operation failed: ', error);
+	if (error.response) {
+		throw new NodeOperationError(
+			this.getNode(),
+			`DIMO API error: ${error.response.data}`
+		);
+	}
+	throw error;
+}
+}
 }
