@@ -36,25 +36,79 @@ export class Dimo implements INodeType {
     properties: [
       {
         displayName: 'Operation',
-        name: 'operation',
+        name: 'resource',
         type: 'options',
         noDataExpression: true,
         options: [
           {
+            name: 'Authentication',
+            value: 'authentication',
+          },
+          {
+            name: 'Attestation API',
+            value: 'attestation',
+          },
+					{
+						name: 'Device Data API',
+						value: 'devicedata',
+					},
+					{
+						name: 'Identity API',
+						value: 'identity',
+					},
+					// TODO: Add Telemetry + disable linting for alphabetical order (its incorrect)
+        ],
+        default: 'authentication',
+      },
+			// Authentication Options
+			{
+        displayName: 'Operation',
+        name: 'operation',
+        type: 'options',
+				noDataExpression: true,
+        displayOptions: {
+          show: {
+            resource: ['authentication'],
+          },
+        },
+        options: [
+          {
             name: 'Get Developer JWT',
             value: 'getDeveloperJwt',
+						action: 'Get developer jwt',
           },
           {
             name: 'Get Vehicle JWT',
             value: 'getVehicleJwt',
+						action: 'Get vehicle jwt'
           },
-					// TODO (Barrett): Remove testing
-					{
-						name: 'Attestation',
-						value: 'getVinVc'
-					}
         ],
         default: 'getDeveloperJwt',
+      },
+			// Attestation Options
+			{
+        displayName: 'Operation',
+        name: 'operation',
+        type: 'options',
+				noDataExpression: true,
+        displayOptions: {
+          show: {
+            resource: ['attestation'],
+          },
+        },
+        options: [
+          {
+            name: 'Create VIN VC',
+            value: 'createVinVc',
+						action: 'Create vin vc'
+          },
+          {
+            name: 'Create POM VC',
+            value: 'createPomVc',
+						action: 'Create pom vc'
+          },
+        ],
+        default: 'createVinVc',
       },
       {
         displayName: 'Token ID',
