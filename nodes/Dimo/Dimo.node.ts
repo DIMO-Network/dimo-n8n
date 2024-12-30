@@ -7,6 +7,14 @@ import {
 } from 'n8n-workflow';
 import { ethers } from 'ethers';
 
+// TODO: ADD IMPORTS
+// import { authentication } from ./operations/Authentication
+// import { attestation } from ./operations/Attestation
+// import { devicedata } from ./operations/Devicedata
+// import { identity } from ./operations/Identity
+// import { telemetry } from ./operations/Telemetry
+// import { trips } from ./operations/Trips
+
 interface DimoApiCredentials {
   clientId: string;
   domain: string;
@@ -40,14 +48,14 @@ export class Dimo implements INodeType {
         type: 'options',
         noDataExpression: true,
         options: [
-          {
-            name: 'Authentication',
-            value: 'authentication',
-          },
-          {
-            name: 'Attestation API',
-            value: 'attestation',
-          },
+					{
+						name: 'Attestation API',
+						value: 'attestation',
+					},
+					{
+						name: 'Authentication',
+						value: 'authentication',
+					},
 					{
 						name: 'Device Data API',
 						value: 'devicedata',
@@ -56,8 +64,15 @@ export class Dimo implements INodeType {
 						name: 'Identity API',
 						value: 'identity',
 					},
-					// TODO: Add Telemetry + disable linting for alphabetical order (its incorrect)
-        ],
+					{
+						name: 'Telemetry API',
+						value: 'telemetry',
+					},
+					{
+						name: 'Trips API',
+						value: 'trips'
+					}
+				],
         default: 'authentication',
       },
 			// Authentication Options
@@ -110,6 +125,16 @@ export class Dimo implements INodeType {
         ],
         default: 'createVinVc',
       },
+
+			// TODO: REMOVE COMMENT
+			// ...authentication.getProperties(),
+			// ...attestation.getProperties(),
+			// ...devicedata.getProperties(),
+			// ...identity.getProperties(),
+			// ...telemetry.getProperties(),
+			// ...trips.getProperties(),
+
+			// TODO: MOVE THE BELOW TO HELPER FILE
       {
         displayName: 'Token ID',
         name: 'tokenId',
