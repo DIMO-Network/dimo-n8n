@@ -1,4 +1,4 @@
-import { IExecuteFunctions, Node, NodeOperationError } from "n8n-workflow";
+import { IExecuteFunctions, NodeOperationError } from "n8n-workflow";
 import { ethers } from 'ethers';
 
 export class DimoHelper {
@@ -33,11 +33,11 @@ export class DimoHelper {
 
 	async generateChallenge(): Promise<{ challenge: string, state: string }> {
 		const requestBody = new URLSearchParams({
-			client_id: this.credentials.client_id,
+			client_id: this.credentials.clientId,
 			domain: this.credentials.domain,
 			scope: 'openid email',
-			response: 'code',
-			address: this.credentials.client_id,
+			response_type: 'code',
+			address: this.credentials.clientId,
 		}).toString();
 
 		const challengeResponse = await this.executeFunctions.helpers.request({
