@@ -9,7 +9,7 @@ import { DimoHelper } from './DimoHelper';
 
 // TODO: ADD IMPORTS
 import { authentication } from './operations/Authentication'
-// import { attestation } from './operations/Attestation'
+import { attestation } from './operations/Attestation';
 // import { devicedata } from './operations/DeviceData'
 // import { identity } from './operations/Identity'
 // import { telemetry } from './operations/Telemetry'
@@ -130,7 +130,7 @@ export class Dimo implements INodeType {
 
 			// TODO: REMOVE COMMENT
 			...authentication.getProperties(),
-			// ...attestation.getProperties(),
+			...attestation.getProperties(),
 			// ...devicedata.getProperties(),
 			// ...identity.getProperties(),
 			// ...telemetry.getProperties(),
@@ -151,6 +151,9 @@ export class Dimo implements INodeType {
 			switch (resource) {
 				case 'authentication':
 					result = await authentication.execute(helper, operation);
+					break;
+				case 'attestation':
+					result = await attestation.execute(helper, operation);
 					break;
 				default:
 				// TODO (Barrett): better errors

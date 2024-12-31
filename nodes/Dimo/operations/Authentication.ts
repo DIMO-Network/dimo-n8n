@@ -45,6 +45,7 @@ export const authentication = {
         const privilegesString = helper.executeFunctions.getNodeParameter('privileges', 0) as string;
         const privileges = privilegesString.split(',').map(p => parseInt(p.trim(), 10));
 
+				// TODO: Create Base paths in DimoHelper.ts for all endpoints - dev/prod
 				const vehicleJwtResponse = await helper.executeFunctions.helpers.request({
 					method: 'POST',
 					url: 'https://token-exchange-api.dimo.zone/v1/tokens/exchange',
