@@ -36,12 +36,15 @@ export const attestation = {
 		const vehicleJwt = helper.executeFunctions.getNodeParameter('vehicleJwt', 0) as string;
 		const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as number;
 
+		const basePath = helper.credentials.environment === 'Dev'
+    ? 'https://attestation-api.dev.dimo.zone'
+    : 'https://attestation-api.dimo.zone';
+
 		switch (operation) {
 			case 'createVinVc':
-			// TODO: Create Base paths in DimoHelper.ts for all endpoints - dev/prod
 			const vinVcResponse = await helper.executeFunctions.helpers.request({
 				method: 'POST',
-				url: `https://attestation-api.dimo.zone/v1/vc/vin/${tokenId}`,
+				url: `${basePath}/v1/vc/vin/${tokenId}`,
 				headers: {
 					'Authorization': `Bearer ${vehicleJwt}`,
           'Content-Type': 'application/json',
@@ -49,18 +52,26 @@ export const attestation = {
 				params: { force: true },
 			});
 
-			return vinVcResponse;
+			return {
+				message: vinVcResponse.message,
+				vinVcResponse
+			}
+
+
 			case `createPomVc`:
 				const pomVcResponse = await helper.executeFunctions.helpers.request({
 					method: 'POST',
-					url: `https://attestation-api.dimo.zone/v1/vc/pom/${tokenId}`,
+					url: `${basePath}/v1/vc/pom/${tokenId}`,
 					headers: {
 						'Authorization': `Bearer ${vehicleJwt}`,
           	'Content-Type': 'application/json',
 					},
 				});
 
-				return pomVcResponse;
+				return {
+					message: pomVcResponse.message,
+					pomVcResponse,
+				}
 
 			default:
 				// TODO: Better errors
