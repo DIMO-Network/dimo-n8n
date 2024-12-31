@@ -10,7 +10,7 @@ import { DimoHelper } from './DimoHelper';
 // TODO: ADD IMPORTS
 import { authentication } from './operations/Authentication'
 import { attestation } from './operations/Attestation';
-// import { devicedata } from './operations/DeviceData'
+import { devicedefinitions } from './operations/DeviceDefinitions'
 // import { identity } from './operations/Identity'
 // import { telemetry } from './operations/Telemetry'
 // import { trips } from './operations/Trips'
@@ -58,8 +58,8 @@ export class Dimo implements INodeType {
 						value: 'authentication',
 					},
 					{
-						name: 'Device Data API',
-						value: 'devicedata',
+						name: 'Device Definitions API',
+						value: 'devicedefinitions',
 					},
 					{
 						name: 'Identity API',
@@ -126,12 +126,37 @@ export class Dimo implements INodeType {
         ],
         default: 'createVinVc',
       },
+			// Device Definitions Options
+			{
+        displayName: 'Operation',
+        name: 'operation',
+        type: 'options',
+				noDataExpression: true,
+        displayOptions: {
+          show: {
+            resource: ['devicedefinitions'],
+          },
+        },
+        options: [
+          {
+            name: 'Decode VIN',
+            value: 'decodeVin',
+						action: 'Decode vin'
+          },
+          {
+            name: 'Search',
+            value: 'search',
+						action: 'Search'
+          },
+        ],
+        default: 'decodeVin',
+      },
 			// TODO: Add Rest of options
 
 			// TODO: REMOVE COMMENT
 			...authentication.getProperties(),
 			...attestation.getProperties(),
-			// ...devicedata.getProperties(),
+			...devicedefinitions.getProperties(),
 			// ...identity.getProperties(),
 			// ...telemetry.getProperties(),
 			// ...trips.getProperties(),
@@ -154,6 +179,9 @@ export class Dimo implements INodeType {
 					break;
 				case 'attestation':
 					result = await attestation.execute(helper, operation);
+					break;
+				case 'devicedefinitions':
+					result = await devicedefinitions.execute(helper, operation);
 					break;
 				default:
 				// TODO (Barrett): better errors
