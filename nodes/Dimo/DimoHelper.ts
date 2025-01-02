@@ -66,12 +66,12 @@ export class DimoHelper {
 	}
 
 	async signChallenge(challenge: string): Promise<string> {
-		let privateKey = this.credentials.privateKey;
-		if (!privateKey.startsWith('0x')) {
-			privateKey = '0x' + privateKey;
+		let apiKey = this.credentials.apiKey;
+		if (!apiKey.startsWith('0x')) {
+			apiKey = '0x' + apiKey;
 		}
 
-		const wallet = new ethers.Wallet(privateKey);
+		const wallet = new ethers.Wallet(apiKey);
 		return await wallet.signMessage(challenge);
 	}
 

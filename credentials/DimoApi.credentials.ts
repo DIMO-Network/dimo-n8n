@@ -26,14 +26,14 @@ export class DimoApi implements ICredentialType {
       required: true,
     },
     {
-      displayName: 'Private Key',
-      name: 'privateKey',
+      displayName: 'API Key',
+      name: 'apiKey',
       type: 'string',
       typeOptions: {
         password: true,
       },
       default: '',
-      description: 'Your Ethereum private key for signing authentication challenges',
+      description: 'Your API key, generated in the DIMO Dev Console, for signing authentication challenges',
       required: true,
     },
     {

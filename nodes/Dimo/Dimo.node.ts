@@ -11,7 +11,7 @@ import { DimoHelper } from './DimoHelper';
 import { authentication } from './operations/Authentication'
 import { attestation } from './operations/Attestation';
 import { devicedefinitions } from './operations/DeviceDefinitions'
-// import { identity } from './operations/Identity'
+import { identity } from './operations/Identity'
 // import { telemetry } from './operations/Telemetry'
 import { trips } from './operations/Trips'
 
@@ -171,13 +171,39 @@ export class Dimo implements INodeType {
         ],
         default: 'getTrips',
       },
+			// Identity Options
+			{
+        displayName: 'Operation',
+        name: 'operation',
+        type: 'options',
+				noDataExpression: true,
+        displayOptions: {
+          show: {
+            resource: ['identity'],
+          },
+        },
+        options: [
+          {
+            name: 'Custom Identity Query',
+            value: 'customIdentity',
+						action: 'Custom identity query'
+          },
+					{
+            name: 'Count DIMO Vehicles',
+            value: 'countDimoVehicles',
+						action: 'Count dimo vehicles'
+          },
+        ],
+        default: 'customIdentity',
+      },
+
 			// TODO: Add Rest of options
 
 			// TODO: REMOVE COMMENT
 			...authentication.getProperties(),
 			...attestation.getProperties(),
 			...devicedefinitions.getProperties(),
-			// ...identity.getProperties(),
+			...identity.getProperties(),
 			// ...telemetry.getProperties(),
 			...trips.getProperties(),
     ],
@@ -205,6 +231,9 @@ export class Dimo implements INodeType {
 					break;
 				case 'trips':
 					result = await trips.execute(helper, operation);
+					break;
+				case 'identity':
+					result = await identity.execute(helper, operation);
 					break;
 				default:
 				// TODO (Barrett): better errors
