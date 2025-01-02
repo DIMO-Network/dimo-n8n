@@ -13,7 +13,7 @@ import { attestation } from './operations/Attestation';
 import { devicedefinitions } from './operations/DeviceDefinitions'
 // import { identity } from './operations/Identity'
 // import { telemetry } from './operations/Telemetry'
-// import { trips } from './operations/Trips'
+import { trips } from './operations/Trips'
 
 interface DimoApiCredentials {
   clientId: string;
@@ -151,6 +151,26 @@ export class Dimo implements INodeType {
         ],
         default: 'decodeVin',
       },
+			// Trips Options
+			{
+        displayName: 'Operation',
+        name: 'operation',
+        type: 'options',
+				noDataExpression: true,
+        displayOptions: {
+          show: {
+            resource: ['trips'],
+          },
+        },
+        options: [
+          {
+            name: 'Get Trips',
+            value: 'getTrips',
+						action: 'Get trips'
+          },
+        ],
+        default: 'getTrips',
+      },
 			// TODO: Add Rest of options
 
 			// TODO: REMOVE COMMENT
@@ -159,7 +179,7 @@ export class Dimo implements INodeType {
 			...devicedefinitions.getProperties(),
 			// ...identity.getProperties(),
 			// ...telemetry.getProperties(),
-			// ...trips.getProperties(),
+			...trips.getProperties(),
     ],
   };
 
@@ -182,6 +202,9 @@ export class Dimo implements INodeType {
 					break;
 				case 'devicedefinitions':
 					result = await devicedefinitions.execute(helper, operation);
+					break;
+				case 'trips':
+					result = await trips.execute(helper, operation);
 					break;
 				default:
 				// TODO (Barrett): better errors
