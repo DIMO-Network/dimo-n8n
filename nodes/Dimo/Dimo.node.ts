@@ -12,7 +12,7 @@ import { authentication } from './operations/Authentication'
 import { attestation } from './operations/Attestation';
 import { devicedefinitions } from './operations/DeviceDefinitions'
 import { identity } from './operations/Identity'
-// import { telemetry } from './operations/Telemetry'
+import { telemetry } from './operations/Telemetry'
 import { trips } from './operations/Trips'
 
 interface DimoApiCredentials {
@@ -171,6 +171,31 @@ export class Dimo implements INodeType {
         ],
         default: 'getTrips',
       },
+			// Telemetry Options
+			{
+        displayName: 'Operation',
+        name: 'operation',
+        type: 'options',
+				noDataExpression: true,
+        displayOptions: {
+          show: {
+            resource: ['telemetry'],
+          },
+        },
+        options: [
+          {
+            name: 'Custom Telemetry Query',
+            value: 'customTelemetry',
+						action: 'Custom telemetry query'
+          },
+					{
+            name: 'Get Vehicle VIN',
+            value: 'getVehicleVin',
+						action: 'Get vehicle vin'
+          },
+        ],
+        default: 'customTelemetry',
+      },
 			// Identity Options
 			{
         displayName: 'Operation',
@@ -197,14 +222,12 @@ export class Dimo implements INodeType {
         default: 'customIdentity',
       },
 
-			// TODO: Add Rest of options
-
-			// TODO: REMOVE COMMENT
+			// Get Properties of all
 			...authentication.getProperties(),
 			...attestation.getProperties(),
 			...devicedefinitions.getProperties(),
 			...identity.getProperties(),
-			// ...telemetry.getProperties(),
+			...telemetry.getProperties(),
 			...trips.getProperties(),
     ],
   };
@@ -231,6 +254,9 @@ export class Dimo implements INodeType {
 					break;
 				case 'trips':
 					result = await trips.execute(helper, operation);
+					break;
+				case 'telemetry':
+					result = await telemetry.execute(helper, operation);
 					break;
 				case 'identity':
 					result = await identity.execute(helper, operation);

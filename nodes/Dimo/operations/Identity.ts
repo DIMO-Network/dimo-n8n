@@ -4,7 +4,7 @@ export const identity = {
 	getProperties(): INodeProperties[] {
 		return [
 			{
-				displayName: `Custom Identity Query`,
+				displayName: 'Custom Identity Query',
 				name: 'customIdentityQuery',
 				type: 'string',
 				typeOptions: {
