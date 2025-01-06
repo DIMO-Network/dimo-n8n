@@ -4,19 +4,6 @@ export const attestation = {
 	getProperties(): INodeProperties[] {
 		return [
 			{
-				displayName: 'Privileges',
-				name: 'privileges',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['attestation'],
-					},
-				},
-				default: '',
-				description: 'Comma-separated list of privileges - e.g. 1,2,3,4,5',
-				required: true,
-			},
-			{
 				displayName: 'Token ID',
 				name: 'tokenId',
 				type: 'number',
@@ -29,11 +16,23 @@ export const attestation = {
 				description: 'The Token ID of the vehicle you are creating a VIN Verifiable Credential for',
 				required: true,
 			},
+			{
+				displayName: 'Privileges',
+				name: 'privileges',
+				type: 'string',
+				displayOptions: {
+					show: {
+						resource: ['attestation'],
+					},
+				},
+				default: '',
+				description: 'Comma-separated list of privileges - e.g. 1,2,3,4,5',
+				required: true,
+			},
 		];
 	},
 
 	async execute(helper: any, operation: string){
-		// const vehicleJwt = helper.executeFunctions.getNodeParameter('vehicleJwt', 0) as string;
 		const developerJwt = await helper.getDeveloperJwt();
 		const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as number;
 		const privilegesString = helper.executeFunctions.getNodeParameter('privileges', 0) as string;

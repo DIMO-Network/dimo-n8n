@@ -4,30 +4,29 @@ export const telemetry = {
 	getProperties(): INodeProperties[] {
 		return [
 			{
-				displayName: 'Vehicle JWT',
-				name: 'vehicleJwt',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['telemetry'],
-					},
-				},
-				default: '={{ $json.vehicle_jwt }}',
-				description: 'The JWT token for the vehicle. If you do not already have one, connect a DIMO Node before this to get one.',
-				required: true,
-			},
-			{
 				displayName: 'Token ID',
 				name: 'tokenId',
 				type: 'number',
 				displayOptions: {
 					show: {
 						resource: ['telemetry'],
-						operation: ['getVehicleVin']
 					},
 				},
 				default: 0,
 				description: 'The Token ID of the vehicle you are creating a VIN Verifiable Credential for',
+				required: true,
+			},
+			{
+				displayName: 'Privileges',
+				name: 'privileges',
+				type: 'string',
+				displayOptions: {
+					show: {
+						resource: ['telemetry'],
+					},
+				},
+				default: '',
+				description: 'Comma-separated list of privileges - e.g. 1,2,3,4,5',
 				required: true,
 			},
 			{
@@ -64,7 +63,11 @@ export const telemetry = {
 	},
 
 	async execute(helper: any, operation: string){
-		const vehicleJwt = helper.executeFunctions.getNodeParameter('vehicleJwt', 0) as string;
+		const developerJwt = await helper.getDeveloperJwt();
+		const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as number;
+		const privilegesString = helper.executeFunctions.getNodeParameter('privileges', 0) as string;
+
+		const vehicleJwt = await helper.getVechileJwt(developerJwt, tokenId, privilegesString)
 
 		const basePath = helper.credentials.environment === 'Dev'
 		? 'https://telemetry-api.dev.dimo.zone/query'
@@ -94,7 +97,6 @@ export const telemetry = {
 			}
 
 			case 'getVehicleVin': {
-				const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as number;
 
 				const query = `{
 				vinVCLatest(tokenId: ${tokenId}){

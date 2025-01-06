@@ -4,19 +4,6 @@ export const devicedefinitions = {
 	getProperties(): INodeProperties[] {
 		return [
 			{
-				displayName: 'Developer JWT',
-				name: 'developerJwt',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['devicedefinitions'],
-					},
-				},
-				default: '={{ $json.developer_jwt }}',
-				description: 'The Developer JWT. If you do not already have one, connect a DIMO Node before this to get one.',
-				required: true,
-			},
-			{
 				displayName: 'Country Code',
 				name: 'countryCode',
 				type: 'string',
@@ -126,7 +113,7 @@ export const devicedefinitions = {
 	},
 
 	async execute(helper: any, operation: string) {
-		const developerJwt = helper.executeFunctions.getNodeParameter('developerJwt', 0) as string;
+		const developerJwt = await helper.getDeveloperJwt();
 
 		const basePath = helper.credentials.environment === 'Dev'
 			? 'https://device-definitions-api.dev.dimo.zone'
