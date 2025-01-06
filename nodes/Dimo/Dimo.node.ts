@@ -54,6 +54,10 @@ export class Dimo implements INodeType {
 						value: 'attestation',
 					},
 					{
+						name: 'Authentication API',
+						value: 'authentication'
+					},
+					{
 						name: 'Device Definitions API',
 						value: 'devicedefinitions',
 					},
