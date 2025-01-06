@@ -35,41 +35,16 @@ export const authentication = {
 	},
 
 	async execute(helper: any, operation: string) {
-		switch (operation) {
-			case 'getDeveloperJwt':
-				const jwt = await helper.getDeveloperJwt();
-				return { developer_jwt: jwt }
-			case 'getVehicleJwt':
-				const devJwt = await helper.getDeveloperJwt();
-				const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as number;
-        const privilegesString = helper.executeFunctions.getNodeParameter('privileges', 0) as string;
-        const privileges = privilegesString.split(',').map(p => parseInt(p.trim(), 10));
+		try {
+			const developerJwt = await helper.getDeveloperJwt();
+			const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as number;
+			const privilegesString = helper.executeFunctions.getNodeParameter('privileges', 0) as string;
 
-				// TODO: Create Base paths in DimoHelper.ts for all endpoints - dev/prod
-				const vehicleJwtResponse = await helper.executeFunctions.helpers.request({
-					method: 'POST',
-					url: 'https://token-exchange-api.dimo.zone/v1/tokens/exchange',
-          headers: {
-            'Authorization': `Bearer ${devJwt}`,
-            'Content-Type': 'application/json',
-            'User-Agent': 'dimo-n8n'
-          },
-          body: JSON.stringify({
-            nftContractAddress: helper.nftAddress,
-            privileges,
-            tokenId
-          }),
-				});
+			const vehicleJwt = await helper.getVehicleJwt(developerJwt, tokenId, privilegesString);
 
-				const parsedVehicleJwtResponse = typeof vehicleJwtResponse === 'string'
-					? JSON.parse(vehicleJwtResponse)
-					: vehicleJwtResponse;
-
-				return { vehicle_jwt: parsedVehicleJwtResponse.token }
-
-			default:
-				// TODO (Barrett): better error messaging here
-				throw new Error(`This operation failed: ${operation}`)
+			return {"vehicleJwt": vehicleJwt}
+		} catch {
+				throw new Error(`The operation failed: ${operation}`)
 		}
 	}
 }

@@ -102,7 +102,7 @@ export class DimoHelper {
 		return response.access_token;
 	}
 
-	async getVechileJwt(devJwt: string, tokenId: number, privilegesString: string): Promise<any> {
+	async getVehicleJwt(devJwt: string, tokenId: number, privilegesString: string): Promise<any> {
 		const privileges = privilegesString.split(',').map(p => parseInt(p.trim(), 10));
 
 		const vehicleJwtResponse = await this.executeFunctions.helpers.request({

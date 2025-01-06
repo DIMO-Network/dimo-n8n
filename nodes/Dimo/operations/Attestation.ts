@@ -37,7 +37,7 @@ export const attestation = {
 		const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as number;
 		const privilegesString = helper.executeFunctions.getNodeParameter('privileges', 0) as string;
 
-		const vehicleJwt = await helper.getVechileJwt(developerJwt, tokenId, privilegesString)
+		const vehicleJwt = await helper.getVehicleJwt(developerJwt, tokenId, privilegesString)
 
 		const basePath = helper.credentials.environment === 'Dev'
     ? 'https://attestation-api.dev.dimo.zone'
