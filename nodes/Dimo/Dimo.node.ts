@@ -44,7 +44,7 @@ export class Dimo implements INodeType {
     ],
     properties: [
       {
-        displayName: 'Operation',
+        displayName: 'Resource',
         name: 'resource',
         type: 'options',
         noDataExpression: true,
@@ -52,10 +52,6 @@ export class Dimo implements INodeType {
 					{
 						name: 'Attestation API',
 						value: 'attestation',
-					},
-					{
-						name: 'Authentication',
-						value: 'authentication',
 					},
 					{
 						name: 'Device Definitions API',
@@ -74,7 +70,7 @@ export class Dimo implements INodeType {
 						value: 'trips'
 					}
 				],
-        default: 'authentication',
+        default: 'attestation',
       },
 			// Authentication Options
 			{
@@ -89,17 +85,12 @@ export class Dimo implements INodeType {
         },
         options: [
           {
-            name: 'Get Developer JWT',
-            value: 'getDeveloperJwt',
-						action: 'Get developer jwt',
-          },
-          {
             name: 'Get Vehicle JWT',
             value: 'getVehicleJwt',
 						action: 'Get vehicle jwt'
           },
         ],
-        default: 'getDeveloperJwt',
+        default: 'getVehicleJwt',
       },
 			// Attestation Options
 			{

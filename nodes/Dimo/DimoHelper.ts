@@ -1,4 +1,4 @@
-import { IExecuteFunctions, NodeOperationError } from "n8n-workflow";
+import { IExecuteFunctions, NodeOperationError, } from "n8n-workflow";
 import { ethers } from 'ethers';
 
 export class DimoHelper {
@@ -100,5 +100,30 @@ export class DimoHelper {
 		const response = await this.submitChallenge(state, signature);
 
 		return response.access_token;
+	}
+
+	async getVechileJwt(devJwt: string, tokenId: number, privilegesString: string): Promise<any> {
+		const privileges = privilegesString.split(',').map(p => parseInt(p.trim(), 10));
+
+		const vehicleJwtResponse = await this.executeFunctions.helpers.request({
+			method: 'POST',
+			url: 'https://token-exchange-api.dimo.zone/v1/tokens/exchange',
+			headers: {
+				'Authorization': `Bearer ${devJwt}`,
+				'Content-Type': 'application/json',
+				'User-Agent': 'dimo-n8n'
+			},
+			body: JSON.stringify({
+				nftContractAddress: this.nftAddress,
+				privileges,
+				tokenId
+			}),
+		});
+
+		const parsedVehicleJwtResponse = typeof vehicleJwtResponse === 'string'
+					? JSON.parse(vehicleJwtResponse)
+					: vehicleJwtResponse;
+
+		return parsedVehicleJwtResponse.token
 	}
 }

@@ -4,16 +4,16 @@ export const attestation = {
 	getProperties(): INodeProperties[] {
 		return [
 			{
-				displayName: 'Vehicle JWT',
-				name: 'vehicleJwt',
+				displayName: 'Privileges',
+				name: 'privileges',
 				type: 'string',
 				displayOptions: {
 					show: {
 						resource: ['attestation'],
 					},
 				},
-				default: '={{ $json.vehicle_jwt }}',
-				description: 'The JWT token for the vehicle. If you do not already have one, connect a DIMO Node before this to get one.',
+				default: '',
+				description: 'Comma-separated list of privileges - e.g. 1,2,3,4,5',
 				required: true,
 			},
 			{
@@ -33,12 +33,17 @@ export const attestation = {
 	},
 
 	async execute(helper: any, operation: string){
-		const vehicleJwt = helper.executeFunctions.getNodeParameter('vehicleJwt', 0) as string;
+		// const vehicleJwt = helper.executeFunctions.getNodeParameter('vehicleJwt', 0) as string;
+		const developerJwt = await helper.getDeveloperJwt();
 		const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as number;
+		const privilegesString = helper.executeFunctions.getNodeParameter('privileges', 0) as string;
+
+		const vehicleJwt = await helper.getVechileJwt(developerJwt, tokenId, privilegesString)
 
 		const basePath = helper.credentials.environment === 'Dev'
     ? 'https://attestation-api.dev.dimo.zone'
     : 'https://attestation-api.dimo.zone';
+
 
 		switch (operation) {
 			case 'createVinVc':
