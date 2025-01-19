@@ -12,11 +12,12 @@ import { authentication } from './operations/Authentication'
 import { authenticationDescription } from './descriptions/AuthDescription';
 import { attestation } from './operations/Attestation';
 import { attestationDescription } from './descriptions/AttestationDescription';
-import { devicedefinitions } from './operations/DeviceDefinitions'
+import { devicedefinitions } from './operations/DeviceDefinitions';
+import { deviceDefinitionsDescription } from './descriptions/DeviceDefinitionsDescription';
 import { identity } from './operations/Identity'
 import { telemetry } from './operations/Telemetry'
 import { trips } from './operations/Trips'
-import { deviceDefinitionsDescription } from './descriptions/DeviceDefinitionsDescription';
+import { tripsDescription } from './descriptions/TripsDescription';
 
 interface DimoApiCredentials {
   clientId: string;
@@ -89,25 +90,8 @@ export class Dimo implements INodeType {
 			deviceDefinitionsDescription.operations,
 			...deviceDefinitionsDescription.properties,
 			// Trips Options
-			{
-        displayName: 'Operation',
-        name: 'operation',
-        type: 'options',
-				noDataExpression: true,
-        displayOptions: {
-          show: {
-            resource: ['trips'],
-          },
-        },
-        options: [
-          {
-            name: 'Get Trips',
-            value: 'getTrips',
-						action: 'Get trips'
-          },
-        ],
-        default: 'getTrips',
-      },
+			tripsDescription.operations,
+			...tripsDescription.properties,
 			// Telemetry Options
 			{
         displayName: 'Operation',
