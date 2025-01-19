@@ -16,6 +16,7 @@ import { deviceDefinitionsDescription } from './descriptions/DeviceDefinitionsDe
 import { identity } from './operations/Identity';
 import { identityDescription } from './descriptions/IdentityDescription';
 import { telemetry } from './operations/Telemetry';
+import { telemetryDescription } from './descriptions/TelemetryDescription';
 import { trips } from './operations/Trips';
 import { tripsDescription } from './descriptions/TripsDescription';
 
@@ -93,30 +94,8 @@ export class Dimo implements INodeType {
 			tripsDescription.operations,
 			...tripsDescription.properties,
 			// Telemetry Options
-			{
-        displayName: 'Operation',
-        name: 'operation',
-        type: 'options',
-				noDataExpression: true,
-        displayOptions: {
-          show: {
-            resource: ['telemetry'],
-          },
-        },
-        options: [
-          {
-            name: 'Custom Telemetry Query',
-            value: 'customTelemetry',
-						action: 'Custom telemetry query'
-          },
-					{
-            name: 'Get Vehicle VIN',
-            value: 'getVehicleVin',
-						action: 'Get vehicle vin'
-          },
-        ],
-        default: 'customTelemetry',
-      },
+			telemetryDescription.operations,
+			...telemetryDescription.properties,
 			// Identity Options
 			identityDescription.operations,
 			...identityDescription.properties

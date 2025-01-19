@@ -1,65 +1,9 @@
 import { INodeProperties } from "n8n-workflow";
+import { telemetryProperties } from "../descriptions/TelemetryDescription";
 
 export const telemetry = {
 	getProperties(): INodeProperties[] {
-		return [
-			{
-				displayName: 'Token ID',
-				name: 'tokenId',
-				type: 'number',
-				displayOptions: {
-					show: {
-						resource: ['telemetry'],
-					},
-				},
-				default: 0,
-				description: 'The Token ID of the vehicle you are creating a VIN Verifiable Credential for',
-				required: true,
-			},
-			{
-				displayName: 'Privileges',
-				name: 'privileges',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['telemetry'],
-					},
-				},
-				default: '',
-				description: 'Comma-separated list of privileges - e.g. 1,2,3,4,5',
-				required: true,
-			},
-			{
-				displayName: `Custom Telemetry Query`,
-				name: 'customTelemetryQuery',
-				type: 'string',
-				typeOptions: {
-					alwaysOpenEditWindow: true,
-				},
-				displayOptions: {
-					show: {
-						resource: ['telemetry'],
-						operation: ['customTelemetry']
-					},
-				},
-				default: '',
-				description: 'Your custom GraphQL query for Telemetry',
-				required: true,
-			},
-			{
-				displayName: `Variables`,
-				name: 'variables',
-				type: 'json',
-				displayOptions: {
-					show: {
-						resource: ['telemetry'],
-						operation: ['customTelemetry']
-					},
-				},
-				default: '{}',
-				description: 'Variables for your custom Telemetry query',
-			},
-		];
+		return telemetryProperties;
 	},
 
 	async execute(helper: any, operation: string){
