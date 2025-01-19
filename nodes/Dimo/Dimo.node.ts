@@ -7,16 +7,16 @@ import {
 } from 'n8n-workflow';
 import { DimoHelper } from './DimoHelper';
 
-// TODO: ADD IMPORTS
-import { authentication } from './operations/Authentication'
+import { authentication } from './operations/Authentication';
 import { authenticationDescription } from './descriptions/AuthDescription';
 import { attestation } from './operations/Attestation';
 import { attestationDescription } from './descriptions/AttestationDescription';
 import { devicedefinitions } from './operations/DeviceDefinitions';
 import { deviceDefinitionsDescription } from './descriptions/DeviceDefinitionsDescription';
-import { identity } from './operations/Identity'
-import { telemetry } from './operations/Telemetry'
-import { trips } from './operations/Trips'
+import { identity } from './operations/Identity';
+import { identityDescription } from './descriptions/IdentityDescription';
+import { telemetry } from './operations/Telemetry';
+import { trips } from './operations/Trips';
 import { tripsDescription } from './descriptions/TripsDescription';
 
 interface DimoApiCredentials {
@@ -118,30 +118,8 @@ export class Dimo implements INodeType {
         default: 'customTelemetry',
       },
 			// Identity Options
-			{
-        displayName: 'Operation',
-        name: 'operation',
-        type: 'options',
-				noDataExpression: true,
-        displayOptions: {
-          show: {
-            resource: ['identity'],
-          },
-        },
-        options: [
-          {
-            name: 'Custom Identity Query',
-            value: 'customIdentity',
-						action: 'Custom identity query'
-          },
-					{
-            name: 'Count DIMO Vehicles',
-            value: 'countDimoVehicles',
-						action: 'Count dimo vehicles'
-          },
-        ],
-        default: 'customIdentity',
-      },
+			identityDescription.operations,
+			...identityDescription.properties
     ],
   };
 

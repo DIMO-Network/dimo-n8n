@@ -1,39 +1,9 @@
 import { INodeProperties } from "n8n-workflow";
+import { identityProperties } from "../descriptions/IdentityDescription";
 
 export const identity = {
 	getProperties(): INodeProperties[] {
-		return [
-			{
-				displayName: 'Custom Identity Query',
-				name: 'customIdentityQuery',
-				type: 'string',
-				typeOptions: {
-					alwaysOpenEditWindow: true,
-				},
-				displayOptions: {
-					show: {
-						resource: ['identity'],
-						operation: ['customIdentity']
-					},
-				},
-				default: '',
-				description: 'Your custom GraphQL query for Identity',
-				required: true,
-			},
-			{
-				displayName: `Variables`,
-				name: 'variables',
-				type: 'json',
-				displayOptions: {
-					show: {
-						resource: ['identity'],
-						operation: ['customIdentity']
-					},
-				},
-				default: '{}',
-				description: 'Variables for your custom Identity query',
-			}
-		];
+		return identityProperties;
 	},
 
 	async execute(helper: any, operation: string) {
