@@ -16,6 +16,7 @@ import { devicedefinitions } from './operations/DeviceDefinitions'
 import { identity } from './operations/Identity'
 import { telemetry } from './operations/Telemetry'
 import { trips } from './operations/Trips'
+import { deviceDefinitionsDescription } from './descriptions/DeviceDefinitionsDescription';
 
 interface DimoApiCredentials {
   clientId: string;
@@ -85,30 +86,8 @@ export class Dimo implements INodeType {
 			attestationDescription.operations,
 			...attestationDescription.properties,
 			// Device Definitions Options
-			{
-        displayName: 'Operation',
-        name: 'operation',
-        type: 'options',
-				noDataExpression: true,
-        displayOptions: {
-          show: {
-            resource: ['devicedefinitions'],
-          },
-        },
-        options: [
-          {
-            name: 'Decode VIN',
-            value: 'decodeVin',
-						action: 'Decode vin'
-          },
-          {
-            name: 'Search',
-            value: 'search',
-						action: 'Search'
-          },
-        ],
-        default: 'decodeVin',
-      },
+			deviceDefinitionsDescription.operations,
+			...deviceDefinitionsDescription.properties,
 			// Trips Options
 			{
         displayName: 'Operation',
@@ -179,12 +158,6 @@ export class Dimo implements INodeType {
         ],
         default: 'customIdentity',
       },
-
-			// TODO: Remove these after testing
-			// ...devicedefinitions.getProperties(),
-			// ...identity.getProperties(),
-			// ...telemetry.getProperties(),
-			// ...trips.getProperties(),
     ],
   };
 
