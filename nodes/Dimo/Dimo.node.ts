@@ -11,6 +11,7 @@ import { DimoHelper } from './DimoHelper';
 import { authentication } from './operations/Authentication'
 import { authenticationDescription } from './descriptions/AuthDescription';
 import { attestation } from './operations/Attestation';
+import { attestationDescription } from './descriptions/AttestationDescription';
 import { devicedefinitions } from './operations/DeviceDefinitions'
 import { identity } from './operations/Identity'
 import { telemetry } from './operations/Telemetry'
@@ -81,30 +82,8 @@ export class Dimo implements INodeType {
 			authenticationDescription.operations,
 			...authenticationDescription.properties,
 			// Attestation Options
-			{
-        displayName: 'Operation',
-        name: 'operation',
-        type: 'options',
-				noDataExpression: true,
-        displayOptions: {
-          show: {
-            resource: ['attestation'],
-          },
-        },
-        options: [
-          {
-            name: 'Create VIN VC',
-            value: 'createVinVc',
-						action: 'Create vin vc'
-          },
-          {
-            name: 'Create POM VC',
-            value: 'createPomVc',
-						action: 'Create pom vc'
-          },
-        ],
-        default: 'createVinVc',
-      },
+			attestationDescription.operations,
+			...attestationDescription.properties,
 			// Device Definitions Options
 			{
         displayName: 'Operation',
@@ -202,7 +181,6 @@ export class Dimo implements INodeType {
       },
 
 			// TODO: Remove these after testing
-			// ...attestation.getProperties(),
 			// ...devicedefinitions.getProperties(),
 			// ...identity.getProperties(),
 			// ...telemetry.getProperties(),

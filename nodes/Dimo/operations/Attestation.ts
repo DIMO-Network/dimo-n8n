@@ -1,35 +1,9 @@
 import { INodeProperties } from "n8n-workflow";
+import { attestationProperties } from "../descriptions/AttestationDescription";
 
 export const attestation = {
 	getProperties(): INodeProperties[] {
-		return [
-			{
-				displayName: 'Token ID',
-				name: 'tokenId',
-				type: 'number',
-				displayOptions: {
-					show: {
-						resource: ['attestation'],
-					},
-				},
-				default: 0,
-				description: 'The Token ID of the vehicle you are creating a VIN Verifiable Credential for',
-				required: true,
-			},
-			{
-				displayName: 'Privileges',
-				name: 'privileges',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['attestation'],
-					},
-				},
-				default: '',
-				description: 'Comma-separated list of privileges - e.g. 1,2,3,4,5',
-				required: true,
-			},
-		];
+		return attestationProperties;
 	},
 
 	async execute(helper: any, operation: string){
