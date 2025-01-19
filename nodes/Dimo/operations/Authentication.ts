@@ -1,37 +1,9 @@
 import { INodeProperties } from "n8n-workflow";
+import { authenticationProperties } from "../descriptions/AuthDescription";
 
 export const authentication = {
 	getProperties(): INodeProperties[] {
-		return [
-			{
-				displayName: 'Token ID',
-				name: 'tokenId',
-				type: 'number',
-				displayOptions: {
-					show: {
-						resource: ['authentication'],
-						operation: ['getVehicleJwt'],
-					},
-				},
-				default: 0,
-				description: 'The token ID of the vehicle',
-				required: true,
-			},
-			{
-				displayName: 'Privileges',
-				name: 'privileges',
-				type: 'string',
-				displayOptions: {
-					show: {
-						resource: ['authentication'],
-						operation: ['getVehicleJwt'],
-					},
-				},
-				default: '',
-				description: 'Comma-separated list of privileges - e.g. 1,2,3,4,5',
-				required: true,
-			},
-		];
+		return authenticationProperties;
 	},
 
 	async execute(helper: any, operation: string) {

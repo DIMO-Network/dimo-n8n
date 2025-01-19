@@ -9,6 +9,7 @@ import { DimoHelper } from './DimoHelper';
 
 // TODO: ADD IMPORTS
 import { authentication } from './operations/Authentication'
+import { authenticationDescription } from './descriptions/AuthDescription';
 import { attestation } from './operations/Attestation';
 import { devicedefinitions } from './operations/DeviceDefinitions'
 import { identity } from './operations/Identity'
@@ -77,25 +78,8 @@ export class Dimo implements INodeType {
         default: 'attestation',
       },
 			// Authentication Options
-			{
-        displayName: 'Operation',
-        name: 'operation',
-        type: 'options',
-				noDataExpression: true,
-        displayOptions: {
-          show: {
-            resource: ['authentication'],
-          },
-        },
-        options: [
-          {
-            name: 'Get Vehicle JWT',
-            value: 'getVehicleJwt',
-						action: 'Get vehicle jwt'
-          },
-        ],
-        default: 'getVehicleJwt',
-      },
+			authenticationDescription.operations,
+			...authenticationDescription.properties,
 			// Attestation Options
 			{
         displayName: 'Operation',
@@ -217,13 +201,12 @@ export class Dimo implements INodeType {
         default: 'customIdentity',
       },
 
-			// Get Properties of all
-			...authentication.getProperties(),
-			...attestation.getProperties(),
-			...devicedefinitions.getProperties(),
-			...identity.getProperties(),
-			...telemetry.getProperties(),
-			...trips.getProperties(),
+			// TODO: Remove these after testing
+			// ...attestation.getProperties(),
+			// ...devicedefinitions.getProperties(),
+			// ...identity.getProperties(),
+			// ...telemetry.getProperties(),
+			// ...trips.getProperties(),
     ],
   };
 
