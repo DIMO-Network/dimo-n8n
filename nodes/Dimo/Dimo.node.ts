@@ -19,6 +19,8 @@ import { telemetry } from './operations/Telemetry';
 import { telemetryDescription } from './descriptions/TelemetryDescription';
 import { trips } from './operations/Trips';
 import { tripsDescription } from './descriptions/TripsDescription';
+import { valuations } from './operations/Valuations';
+import { valuationsDescription } from './descriptions/ValuationsDescription';
 
 interface DimoApiCredentials {
   clientId: string;
@@ -76,7 +78,11 @@ export class Dimo implements INodeType {
 					},
 					{
 						name: 'Trips API',
-						value: 'trips'
+						value: 'trips',
+					},
+					{
+						name: 'Valuations API',
+						value: 'valuations',
 					}
 				],
         default: 'attestation',
@@ -98,7 +104,10 @@ export class Dimo implements INodeType {
 			...telemetryDescription.properties,
 			// Identity Options
 			identityDescription.operations,
-			...identityDescription.properties
+			...identityDescription.properties,
+			// Valuations Options
+			valuationsDescription.operations,
+			...valuationsDescription.properties,
     ],
   };
 
@@ -130,6 +139,9 @@ export class Dimo implements INodeType {
 					break;
 				case 'identity':
 					result = await identity.execute(helper, operation);
+					break;
+				case 'valuations':
+					result = await valuations.execute(helper, operation);
 					break;
 				default:
 				// TODO (Barrett): better errors
