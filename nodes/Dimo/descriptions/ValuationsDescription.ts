@@ -44,19 +44,6 @@ export const valuationsProperties: INodeProperties[] = [
 		description: 'The Token ID of the vehicle for Valuations actions',
 		required: true,
 	},
-	{
-		displayName: 'Privileges',
-		name: 'privileges',
-		type: 'string',
-		displayOptions: {
-			show: {
-				resource: ['valuations'],
-			},
-		},
-		default: '',
-		description: 'Comma-separated list of privileges - e.g. 1,2,3,4,5',
-		required: true,
-	},
 ];
 
 export const valuationsDescription = {
