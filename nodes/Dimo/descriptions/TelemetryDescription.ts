@@ -40,19 +40,6 @@ export const telemetryProperties: INodeProperties[] = [
 		required: true,
 	},
 	{
-		displayName: 'Privileges',
-		name: 'privileges',
-		type: 'string',
-		displayOptions: {
-			show: {
-				resource: ['telemetry'],
-			},
-		},
-		default: '',
-		description: 'Comma-separated list of privileges - e.g. 1,2,3,4,5',
-		required: true,
-	},
-	{
 		displayName: `Custom Telemetry Query`,
 		name: 'customTelemetryQuery',
 		type: 'string',

@@ -9,7 +9,7 @@ export const attestation = {
 	async execute(helper: any, operation: string){
 		const developerJwt = await helper.getDeveloperJwt();
 		const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as number;
-		const privilegesString = helper.executeFunctions.getNodeParameter('privileges', 0) as string;
+		const privilegesString = await helper.permissionsDecoder(tokenId);
 
 		const vehicleJwt = await helper.getVehicleJwt(developerJwt, tokenId, privilegesString)
 
