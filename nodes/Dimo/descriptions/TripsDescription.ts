@@ -34,19 +34,6 @@ export const tripsProperties: INodeProperties[] = [
 		description: 'The Token ID of the vehicle you are getting trip data for',
 		required: true,
 	},
-	{
-		displayName: 'Privileges',
-		name: 'privileges',
-		type: 'string',
-		displayOptions: {
-			show: {
-				resource: ['trips'],
-			},
-		},
-		default: '',
-		description: 'Comma-separated list of privileges - e.g. 1,2,3,4,5',
-		required: true,
-	},
 ];
 
 export const tripsDescription = {
