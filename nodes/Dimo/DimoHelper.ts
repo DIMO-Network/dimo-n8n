@@ -102,47 +102,50 @@ export class DimoHelper {
 		return response.access_token;
 	}
 
-	// async permissionsDecoder(tokenId: number): Promise<any> {
-	// 	const developerLicense = this.credentials.clientId;
+	async permissionsDecoder(tokenId: number): Promise<any> {
+		const developerLicense = this.credentials.clientId;
 
-	// 	const identityQuery = `{
-	// 			vehicle(tokenId: ${tokenId}) {
-	// 				sacds(first:100) {
-	// 					nodes {
-	// 						permissions
-	// 						grantee
-	// 					}
-	// 				}
-	// 			}
-	// 		}`;
+		const identityQuery = `{
+				vehicle(tokenId: ${tokenId}) {
+					sacds(first:100) {
+						nodes {
+							permissions
+							grantee
+						}
+					}
+				}
+			}`;
 
-	// 		const queryResponse = await this.executeFunctions.helpers.request({
-	// 			method: 'POST',
-	// 			url: 'https://identity-api.dimo.zone/query',
-	// 			headers: {
-	// 				'Content-Type': 'application/json',
-	// 				'User-Agent': 'dimo-n8n'
-	// 			},
-	// 			body: JSON.stringify({
-	// 				query: identityQuery,
-	// 				variables: {},
-	// 			}),
-	// 		});
+			const queryResponse = await this.executeFunctions.helpers.request({
+				method: 'POST',
+				url: 'https://identity-api.dimo.zone/query',
+				headers: {
+					'Content-Type': 'application/json',
+					'User-Agent': 'dimo-n8n'
+				},
+				body: JSON.stringify({
+					query: identityQuery,
+					variables: {},
+				}),
+			});
 
-	// 		const filteredSacd = queryResponse?.data?.vehicle?.sacds?.nodes?.filter(
-	// 			(node: any) => node.grantee.toLowerCase() === developerLicense.toLowerCase())
-	// 		if (filteredSacd.permissions == "0x3ffc") {
-	// 			return "1,2,3,4,5,6"
-	// 		} else if (filteredSacd.permissions == "0xffc") {
-	// 			return "1,2,3,4,5"
-	// 		} else if (filteredSacd.permissions == "0x3fcc") {
-	// 			return "1,3,4,5,6"
-	// 		}
-	// }
+			const parsedQueryResponse = typeof queryResponse === 'string'
+				? JSON.parse(queryResponse)
+				: queryResponse;
+
+			const filteredSacd = (parsedQueryResponse?.data?.vehicle?.sacds?.nodes).filter(
+				(node: any) => node.grantee.toLowerCase() === developerLicense.toLowerCase())
+			if (filteredSacd[0].permissions === "0x3ffc") {
+				return "1,2,3,4,5,6";
+			} else if (filteredSacd[0].permissions === "0xffc") {
+				return "1,2,3,4,5"
+			} else if (filteredSacd[0].permissions === "0x3fcc") {
+				return "1,3,4,5,6"
+			}
+	}
 
 	async getVehicleJwt(devJwt: string, tokenId: number, privilegesString: string): Promise<any> {
 		const privileges = privilegesString.split(',').map(p => parseInt(p.trim(), 10));
-
 		const vehicleJwtResponse = await this.executeFunctions.helpers.request({
 			method: 'POST',
 			url: 'https://token-exchange-api.dimo.zone/v1/tokens/exchange',
