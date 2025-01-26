@@ -1,4 +1,4 @@
-import { INodeProperties } from "n8n-workflow";
+import { INodeProperties } from 'n8n-workflow';
 
 export const attestationOperations: INodeProperties = {
 	displayName: 'Operation',
@@ -14,12 +14,12 @@ export const attestationOperations: INodeProperties = {
 		{
 			name: 'Create VIN VC',
 			value: 'createVinVc',
-			action: 'Create vin vc'
+			action: 'Create vin vc',
 		},
 		{
 			name: 'Create POM VC',
 			value: 'createPomVc',
-			action: 'Create pom vc'
+			action: 'Create pom vc',
 		},
 	],
 	default: 'createVinVc',

@@ -1,4 +1,4 @@
-import { INodeProperties } from "n8n-workflow";
+import { INodeProperties } from 'n8n-workflow';
 
 export const telemetryOperations: INodeProperties = {
 	displayName: 'Operation',
@@ -14,12 +14,12 @@ export const telemetryOperations: INodeProperties = {
 		{
 			name: 'Custom Telemetry Query',
 			value: 'customTelemetry',
-			action: 'Custom telemetry query'
+			action: 'Custom telemetry query',
 		},
 		{
 			name: 'Get Vehicle VIN',
 			value: 'getVehicleVin',
-			action: 'Get vehicle vin'
+			action: 'Get vehicle vin',
 		},
 	],
 	default: 'customTelemetry',
@@ -49,7 +49,7 @@ export const telemetryProperties: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['telemetry'],
-				operation: ['customTelemetry']
+				operation: ['customTelemetry'],
 			},
 		},
 		default: '',
@@ -63,7 +63,7 @@ export const telemetryProperties: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['telemetry'],
-				operation: ['customTelemetry']
+				operation: ['customTelemetry'],
 			},
 		},
 		default: '{}',

@@ -1,5 +1,5 @@
-import { INodeProperties } from "n8n-workflow";
-import { authenticationProperties } from "../descriptions/AuthDescription";
+import { INodeProperties } from 'n8n-workflow';
+import { authenticationProperties } from '../descriptions/AuthDescription';
 
 export const authentication = {
 	getProperties(): INodeProperties[] {
@@ -14,9 +14,11 @@ export const authentication = {
 
 			const vehicleJwt = await helper.getVehicleJwt(developerJwt, tokenId, privilegesString);
 
-			return {"vehicleJwt": vehicleJwt}
+			return { vehicleJwt: vehicleJwt };
 		} catch {
-				throw new Error(`The operation failed: ${operation}`)
+			throw new Error(
+				`Operation failure at: ${operation}. Unable to generate Vehicle JWT. Has this vehicle granted permissions?`,
+			);
 		}
-	}
-}
+	},
+};
