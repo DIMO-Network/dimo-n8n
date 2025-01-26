@@ -1,23 +1,23 @@
-import { INodeProperties } from "n8n-workflow";
+import { INodeProperties } from 'n8n-workflow';
 
 export const authenticationOperations: INodeProperties = {
 	displayName: 'Operation',
-    name: 'operation',
-    type: 'options',
-    noDataExpression: true,
-    displayOptions: {
-        show: {
-            resource: ['authentication'],
-        },
-    },
-    options: [
-        {
-            name: 'Get Vehicle JWT',
-            value: 'getVehicleJwt',
-            action: 'Get vehicle jwt'
-        },
-    ],
-    default: 'getVehicleJwt',
+	name: 'operation',
+	type: 'options',
+	noDataExpression: true,
+	displayOptions: {
+		show: {
+			resource: ['authentication'],
+		},
+	},
+	options: [
+		{
+			name: 'Get Vehicle JWT',
+			value: 'getVehicleJwt',
+			action: 'Get vehicle jwt',
+		},
+	],
+	default: 'getVehicleJwt',
 };
 
 export const authenticationProperties: INodeProperties[] = [
@@ -26,10 +26,10 @@ export const authenticationProperties: INodeProperties[] = [
 		name: 'tokenId',
 		type: 'number',
 		displayOptions: {
-				show: {
-						resource: ['authentication'],
-						operation: ['getVehicleJwt'],
-				},
+			show: {
+				resource: ['authentication'],
+				operation: ['getVehicleJwt'],
+			},
 		},
 		default: 0,
 		description: 'The token ID of the vehicle',

@@ -1,37 +1,50 @@
-import { IExecuteFunctions, NodeOperationError, } from "n8n-workflow";
+import { IExecuteFunctions, NodeOperationError } from 'n8n-workflow';
 import { ethers } from 'ethers';
 
-export class DimoHelper {
-  private credentials: any;
-  private executeFunctions: IExecuteFunctions;
+interface PermissionMapping {
+	[key: string]: string;
+}
 
-  constructor(executeFunctions: IExecuteFunctions, credentials: any) {
-    this.executeFunctions = executeFunctions;
-    this.credentials = credentials;
-  }
+const PERMISSION_MAP: PermissionMapping = {
+	'0x3ffc': '1,2,3,4,5,6',
+	'0xffc': '1,2,3,4,5',
+	'0x3fcc': '1,3,4,5,6',
+};
+
+export class DimoHelper {
+	private credentials: any;
+	private executeFunctions: IExecuteFunctions;
+
+	constructor(executeFunctions: IExecuteFunctions, credentials: any) {
+		this.executeFunctions = executeFunctions;
+		this.credentials = credentials;
+	}
 
 	get basePath(): string {
 		return this.credentials.environment === 'Dev'
-		? 'https://auth.dev.dimo.zone'
-		: 'https://auth.dimo.zone';
+			? 'https://auth.dev.dimo.zone'
+			: 'https://auth.dimo.zone';
 	}
 
 	get nftAddress(): string {
 		return this.credentials.environment === 'Dev'
-		? '0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8'
-		: '0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF';
+			? '0x45fbCD3ef7361d156e8b16F5538AE36DEdf61Da8'
+			: '0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF';
 	}
 
 	checkDomain(): void {
-		if (!this.credentials.domain.startsWith('http://') && !this.credentials.domain.startsWith('https://')) {
+		if (
+			!this.credentials.domain.startsWith('http://') &&
+			!this.credentials.domain.startsWith('https://')
+		) {
 			throw new NodeOperationError(
-			this.executeFunctions.getNode(),
-			'Domain must include the protocol - e.g. http:// or https://'
+				this.executeFunctions.getNode(),
+				'Domain must include the protocol - e.g. http:// or https://',
 			);
 		}
 	}
 
-	async generateChallenge(): Promise<{ challenge: string, state: string }> {
+	async generateChallenge(): Promise<{ challenge: string; state: string }> {
 		const requestBody = new URLSearchParams({
 			client_id: this.credentials.clientId,
 			domain: this.credentials.domain,
@@ -44,21 +57,20 @@ export class DimoHelper {
 			method: 'POST',
 			url: `${this.basePath}/auth/web3/generate_challenge`,
 			headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json',
-        'User-Agent': 'dimo-n8n'
-      },
+				'Content-Type': 'application/x-www-form-urlencoded',
+				Accept: 'application/json',
+				'User-Agent': 'dimo-n8n',
+			},
 			body: requestBody,
 		});
 
-		const parsedResponse = typeof challengeResponse === 'string'
-			? JSON.parse(challengeResponse)
-			: challengeResponse;
+		const parsedResponse =
+			typeof challengeResponse === 'string' ? JSON.parse(challengeResponse) : challengeResponse;
 
 		if (!parsedResponse?.challenge) {
 			throw new NodeOperationError(
 				this.executeFunctions.getNode(),
-				'Challenge was not found in the response'
+				'Challenge was not found in the response',
 			);
 		}
 
@@ -83,14 +95,12 @@ export class DimoHelper {
 			url: `${this.basePath}/auth/web3/submit_challenge`,
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': 'dimo-n8n'
+				'User-Agent': 'dimo-n8n',
 			},
 			body: submitBody,
 		});
 
-		return typeof submitResponse === 'string'
-			? JSON.parse(submitResponse)
-			: submitResponse;
+		return typeof submitResponse === 'string' ? JSON.parse(submitResponse) : submitResponse;
 	}
 
 	async getDeveloperJwt(): Promise<string> {
@@ -105,7 +115,7 @@ export class DimoHelper {
 	async permissionsDecoder(tokenId: number): Promise<any> {
 		const developerLicense = this.credentials.clientId;
 
-		const identityQuery = `{
+		const IDENTITY_QUERY = `{
 				vehicle(tokenId: ${tokenId}) {
 					sacds(first:100) {
 						nodes {
@@ -115,56 +125,69 @@ export class DimoHelper {
 					}
 				}
 			}`;
-
+		try {
 			const queryResponse = await this.executeFunctions.helpers.request({
 				method: 'POST',
 				url: 'https://identity-api.dimo.zone/query',
 				headers: {
 					'Content-Type': 'application/json',
-					'User-Agent': 'dimo-n8n'
+					'User-Agent': 'dimo-n8n',
 				},
 				body: JSON.stringify({
-					query: identityQuery,
+					query: IDENTITY_QUERY,
 					variables: {},
 				}),
 			});
 
-			const parsedQueryResponse = typeof queryResponse === 'string'
-				? JSON.parse(queryResponse)
-				: queryResponse;
+			const parsedQueryResponse =
+				typeof queryResponse === 'string' ? JSON.parse(queryResponse) : queryResponse;
 
-			const filteredSacd = (parsedQueryResponse?.data?.vehicle?.sacds?.nodes).filter(
-				(node: any) => node.grantee.toLowerCase() === developerLicense.toLowerCase())
-			if (filteredSacd[0].permissions === "0x3ffc") {
-				return "1,2,3,4,5,6";
-			} else if (filteredSacd[0].permissions === "0xffc") {
-				return "1,2,3,4,5"
-			} else if (filteredSacd[0].permissions === "0x3fcc") {
-				return "1,3,4,5,6"
+			const nodes = parsedQueryResponse?.data?.vehicle?.sacds?.nodes;
+			if (!nodes || !Array.isArray(nodes)) {
+				throw new Error('Invalid response format: missing nodes array');
 			}
+
+			const filteredSacd = nodes.find(
+				(node: any) => node?.grantee?.toLowerCase() === developerLicense.toLowerCase(),
+			);
+
+			if (!filteredSacd) {
+				throw new Error(
+					`No permissions found for developer license: ${developerLicense}. Has this vehicle been shared?`,
+				);
+			}
+
+			const permissions = PERMISSION_MAP[filteredSacd.permissions];
+			if (!permissions) {
+				throw new Error(`Unknown permission hex value: ${filteredSacd.permissions}`);
+			}
+
+			return permissions;
+		} catch (error: any) {
+			throw new Error(`Failed to decode permissions: ${error.message}`);
+		}
 	}
 
 	async getVehicleJwt(devJwt: string, tokenId: number, privilegesString: string): Promise<any> {
-		const privileges = privilegesString.split(',').map(p => parseInt(p.trim(), 10));
+		const privileges = privilegesString.split(',').map((p) => parseInt(p.trim(), 10));
 		const vehicleJwtResponse = await this.executeFunctions.helpers.request({
 			method: 'POST',
 			url: 'https://token-exchange-api.dimo.zone/v1/tokens/exchange',
 			headers: {
-				'Authorization': `Bearer ${devJwt}`,
+				Authorization: `Bearer ${devJwt}`,
 				'Content-Type': 'application/json',
-				'User-Agent': 'dimo-n8n'
+				'User-Agent': 'dimo-n8n',
 			},
 			body: JSON.stringify({
 				nftContractAddress: this.nftAddress,
 				privileges,
-				tokenId
+				tokenId,
 			}),
 		});
 
-		const parsedVehicleJwtResponse = typeof vehicleJwtResponse === 'string'
-					? JSON.parse(vehicleJwtResponse)
-					: vehicleJwtResponse;
+		const parsedVehicleJwtResponse =
+			typeof vehicleJwtResponse === 'string' ? JSON.parse(vehicleJwtResponse) : vehicleJwtResponse;
 
-		return parsedVehicleJwtResponse.token
+		return parsedVehicleJwtResponse.token;
 	}
 }

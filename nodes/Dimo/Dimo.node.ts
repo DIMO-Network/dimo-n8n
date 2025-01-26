@@ -1,9 +1,9 @@
 import {
-  IExecuteFunctions,
-  INodeType,
-  INodeTypeDescription,
-  NodeOperationError,
-  INodeExecutionData,
+	IExecuteFunctions,
+	INodeType,
+	INodeTypeDescription,
+	NodeOperationError,
+	INodeExecutionData,
 } from 'n8n-workflow';
 import { DimoHelper } from './DimoHelper';
 
@@ -23,46 +23,46 @@ import { valuations } from './operations/Valuations';
 import { valuationsDescription } from './descriptions/ValuationsDescription';
 
 interface DimoApiCredentials {
-  clientId: string;
-  domain: string;
-  privateKey: string;
-  environment: string;
+	clientId: string;
+	domain: string;
+	privateKey: string;
+	environment: string;
 }
 
 export class Dimo implements INodeType {
-  description: INodeTypeDescription = {
-    displayName: 'DIMO',
-    name: 'dimo',
-    icon: 'file:Dimo.svg',
-    group: ['transform'],
-    version: 1,
-				subtitle: '={{ $parameter["operation"] + ": " + $parameter["resource"] }}',
-    description: 'Interact with the DIMO API',
-    defaults: {
-      name: 'DIMO',
-    },
-    inputs: ['main'],
-    outputs: ['main'],
-    credentials: [
-      {
-        name: 'dimoApi',
-        required: true,
-      },
-    ],
-    properties: [
-      {
-        displayName: 'Resource',
-        name: 'resource',
-        type: 'options',
-        noDataExpression: true,
-        options: [
+	description: INodeTypeDescription = {
+		displayName: 'DIMO',
+		name: 'dimo',
+		icon: 'file:Dimo.svg',
+		group: ['transform'],
+		version: 1,
+		subtitle: '={{ $parameter["operation"] + ": " + $parameter["resource"] }}',
+		description: 'Interact with the DIMO API',
+		defaults: {
+			name: 'DIMO',
+		},
+		inputs: ['main'],
+		outputs: ['main'],
+		credentials: [
+			{
+				name: 'dimoApi',
+				required: true,
+			},
+		],
+		properties: [
+			{
+				displayName: 'Resource',
+				name: 'resource',
+				type: 'options',
+				noDataExpression: true,
+				options: [
 					{
 						name: 'Attestation API',
 						value: 'attestation',
 					},
 					{
 						name: 'Authentication API',
-						value: 'authentication'
+						value: 'authentication',
 					},
 					{
 						name: 'Device Definitions API',
@@ -83,10 +83,10 @@ export class Dimo implements INodeType {
 					{
 						name: 'Valuations API',
 						value: 'valuations',
-					}
+					},
 				],
-        default: 'attestation',
-      },
+				default: 'attestation',
+			},
 			// Authentication Options
 			authenticationDescription.operations,
 			...authenticationDescription.properties,
@@ -108,16 +108,16 @@ export class Dimo implements INodeType {
 			// Valuations Options
 			valuationsDescription.operations,
 			...valuationsDescription.properties,
-    ],
-  };
+		],
+	};
 
-  async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-    const returnData: INodeExecutionData[] = [];
+	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
+		const returnData: INodeExecutionData[] = [];
 
-    try {
-      const credentials = await this.getCredentials('dimoApi') as unknown as DimoApiCredentials;
-      const operation = this.getNodeParameter('operation', 0) as string;
-      const resource = this.getNodeParameter('resource', 0);
+		try {
+			const credentials = (await this.getCredentials('dimoApi')) as unknown as DimoApiCredentials;
+			const operation = this.getNodeParameter('operation', 0) as string;
+			const resource = this.getNodeParameter('resource', 0);
 			const helper = new DimoHelper(this, credentials);
 
 			let result;
@@ -144,19 +144,18 @@ export class Dimo implements INodeType {
 					result = await valuations.execute(helper, operation);
 					break;
 				default:
-				// TODO (Barrett): better errors
-					throw new NodeOperationError(this.getNode(), `Error: Resource: ${resource}, Operation: ${operation}, Credentials: ${credentials}, Helper: ${helper}`)
+					// TODO (Barrett): better errors
+					throw new NodeOperationError(
+						this.getNode(),
+						`Error: Resource: ${resource}, Operation: ${operation}, Credentials: ${credentials}, Helper: ${helper}`,
+					);
 			}
 
-			returnData.push( { json: result });
-			return [returnData]
-
+			returnData.push({ json: result });
+			return [returnData];
 		} catch (error) {
 			if (error.response) {
-				throw new NodeOperationError(
-					this.getNode(),
-					`DIMO API Error: ${error}`
-				);
+				throw new NodeOperationError(this.getNode(), `DIMO API Error: ${error}`);
 			}
 			throw error;
 		}

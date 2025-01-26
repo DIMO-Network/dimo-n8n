@@ -1,5 +1,5 @@
-import { INodeProperties } from "n8n-workflow";
-import { identityProperties } from "../descriptions/IdentityDescription";
+import { INodeProperties } from 'n8n-workflow';
+import { identityProperties } from '../descriptions/IdentityDescription';
 
 export const identity = {
 	getProperties(): INodeProperties[] {
@@ -7,14 +7,17 @@ export const identity = {
 	},
 
 	async execute(helper: any, operation: string) {
-
-		const basePath = helper.credentials.environment === 'Dev'
-			? 'https://identity-api.dev.dimo.zone/query'
-			: 'https://identity-api.dimo.zone/query';
+		const basePath =
+			helper.credentials.environment === 'Dev'
+				? 'https://identity-api.dev.dimo.zone/query'
+				: 'https://identity-api.dimo.zone/query';
 
 		switch (operation) {
 			case 'customIdentity': {
-				const customQuery = helper.executeFunctions.getNodeParameter('customIdentityQuery', 0) as string;
+				const customQuery = helper.executeFunctions.getNodeParameter(
+					'customIdentityQuery',
+					0,
+				) as string;
 				const variablesStr = helper.executeFunctions.getNodeParameter('variables', 0) as string;
 				const variables = variablesStr ? JSON.parse(variablesStr) : {};
 
@@ -45,12 +48,12 @@ export const identity = {
 					method: 'POST',
 					url: basePath,
 					headers: {
-							'Content-Type': 'application/json',
-							'User-Agent': 'dimo-n8n-node',
+						'Content-Type': 'application/json',
+						'User-Agent': 'dimo-n8n-node',
 					},
 					body: JSON.stringify({
-							query,
-							variables: {},
+						query,
+						variables: {},
 					}),
 				});
 
@@ -58,7 +61,7 @@ export const identity = {
 			}
 
 			default:
-				throw new Error(`The operation failed: ${operation}`)
+				throw new Error(`The operation failed: ${operation}`);
 		}
-	}
-}
+	},
+};

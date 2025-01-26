@@ -1,4 +1,4 @@
-import { INodeProperties } from "n8n-workflow";
+import { INodeProperties } from 'n8n-workflow';
 
 export const deviceDefinitionsOperations: INodeProperties = {
 	displayName: 'Operation',
@@ -14,12 +14,12 @@ export const deviceDefinitionsOperations: INodeProperties = {
 		{
 			name: 'Decode VIN',
 			value: 'decodeVin',
-			action: 'Decode vin'
+			action: 'Decode vin',
 		},
 		{
 			name: 'Search',
 			value: 'search',
-			action: 'Search'
+			action: 'Search',
 		},
 	],
 	default: 'decodeVin',
@@ -78,7 +78,7 @@ export const deviceDefinitionsProperties: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: 'The make of the vehicle you are searching, e.g. Audi, Lexus, etc'
+		description: 'The make of the vehicle you are searching, e.g. Audi, Lexus, etc',
 	},
 	{
 		displayName: 'Vehicle Model',
@@ -91,7 +91,7 @@ export const deviceDefinitionsProperties: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: 'The model of the vehicle you are searching, e.g. Tacoma, Accord, etc'
+		description: 'The model of the vehicle you are searching, e.g. Tacoma, Accord, etc',
 	},
 	{
 		displayName: 'Vehicle Year',
@@ -104,7 +104,7 @@ export const deviceDefinitionsProperties: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: 'The year of the vehicle you are searching, e.g. 2024'
+		description: 'The year of the vehicle you are searching, e.g. 2024',
 	},
 	{
 		displayName: 'Page',
@@ -117,7 +117,7 @@ export const deviceDefinitionsProperties: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: 'Page number (for pagniation, defaults to the first page)'
+		description: 'Page number (for pagniation, defaults to the first page)',
 	},
 	{
 		displayName: 'Page Size',
@@ -130,7 +130,7 @@ export const deviceDefinitionsProperties: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: 'Page size, (to specify the number of items to show on one page)'
+		description: 'Page size, (to specify the number of items to show on one page)',
 	},
 ];
 

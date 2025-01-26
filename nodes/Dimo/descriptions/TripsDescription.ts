@@ -1,4 +1,4 @@
-import { INodeProperties } from "n8n-workflow";
+import { INodeProperties } from 'n8n-workflow';
 
 export const tripsOperations: INodeProperties = {
 	displayName: 'Operation',
@@ -14,7 +14,7 @@ export const tripsOperations: INodeProperties = {
 		{
 			name: 'Get Trips',
 			value: 'getTrips',
-			action: 'Get trips'
+			action: 'Get trips',
 		},
 	],
 	default: 'getTrips',
@@ -39,4 +39,4 @@ export const tripsProperties: INodeProperties[] = [
 export const tripsDescription = {
 	operations: tripsOperations,
 	properties: tripsProperties,
-}
+};

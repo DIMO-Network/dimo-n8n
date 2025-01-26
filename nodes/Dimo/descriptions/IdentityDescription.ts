@@ -1,4 +1,4 @@
-import { INodeProperties } from "n8n-workflow";
+import { INodeProperties } from 'n8n-workflow';
 
 export const identityOperations: INodeProperties = {
 	displayName: 'Operation',
@@ -14,12 +14,12 @@ export const identityOperations: INodeProperties = {
 		{
 			name: 'Custom Identity Query',
 			value: 'customIdentity',
-			action: 'Custom identity query'
+			action: 'Custom identity query',
 		},
 		{
 			name: 'Count DIMO Vehicles',
 			value: 'countDimoVehicles',
-			action: 'Count dimo vehicles'
+			action: 'Count dimo vehicles',
 		},
 	],
 	default: 'customIdentity',
@@ -36,7 +36,7 @@ export const identityProperties: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['identity'],
-				operation: ['customIdentity']
+				operation: ['customIdentity'],
 			},
 		},
 		default: '',
@@ -50,7 +50,7 @@ export const identityProperties: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['identity'],
-				operation: ['customIdentity']
+				operation: ['customIdentity'],
 			},
 		},
 		default: '{}',

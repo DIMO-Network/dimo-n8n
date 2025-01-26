@@ -1,4 +1,4 @@
-import { INodeProperties } from "n8n-workflow";
+import { INodeProperties } from 'n8n-workflow';
 
 export const valuationsOperations: INodeProperties = {
 	displayName: 'Operation',
@@ -14,7 +14,7 @@ export const valuationsOperations: INodeProperties = {
 		{
 			name: 'Valuations Lookup',
 			value: 'valuationsLookup',
-			action: 'Valuations lookup'
+			action: 'Valuations lookup',
 		},
 		{
 			name: 'Get Instant Offer',
