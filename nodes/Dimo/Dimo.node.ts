@@ -24,7 +24,7 @@ import { valuationsDescription } from './descriptions/ValuationsDescription';
 
 interface DimoApiCredentials {
 	clientId: string;
-	domain: string;
+	redirectUri: string;
 	privateKey: string;
 	environment: string;
 }

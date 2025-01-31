@@ -20,11 +20,11 @@ export class DimoApi implements ICredentialType {
       required: true,
     },
     {
-      displayName: 'Domain',
-      name: 'domain',
+      displayName: 'Redirect URI',
+      name: 'redirectUri',
       type: 'string',
       default: '',
-      description: 'The domain associated with your DIMO app',
+      description: 'The redirectUri associated with your DIMO app',
       required: true,
     },
     {

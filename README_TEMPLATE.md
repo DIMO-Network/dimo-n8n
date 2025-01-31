@@ -49,6 +49,8 @@ Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes
 
 Before getting started, you must sign up via the [DIMO Developer Console](https://console.dimo.org/sign-in) and create an application. Once you've created an application in the Dev Console, you'll obtain a `clientId`, can add a `redirectUri`, and generate an API Key. You'll use these credentials directly within the n8n DIMO Node. More information on the DIMO Developer Console can be found in the [DIMO Developer Docs](https://docs.dimo.org/developer-platform/getting-started/developer-guide/developer-console).
 
+![Adding Credentials](/images/Credentials.jpg)
+
 
 
 ## Compatibility

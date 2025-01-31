@@ -32,14 +32,14 @@ export class DimoHelper {
 			: '0xbA5738a18d83D41847dfFbDC6101d37C69c9B0cF';
 	}
 
-	checkDomain(): void {
+	checkRedirectUri(): void {
 		if (
-			!this.credentials.domain.startsWith('http://') &&
-			!this.credentials.domain.startsWith('https://')
+			!this.credentials.redirectUri.startsWith('http://') &&
+			!this.credentials.redirectUri.startsWith('https://')
 		) {
 			throw new NodeOperationError(
 				this.executeFunctions.getNode(),
-				'Domain must include the protocol - e.g. http:// or https://',
+				'Redirect URI must include the protocol - e.g. http:// or https://',
 			);
 		}
 	}
@@ -47,7 +47,7 @@ export class DimoHelper {
 	async generateChallenge(): Promise<{ challenge: string; state: string }> {
 		const requestBody = new URLSearchParams({
 			client_id: this.credentials.clientId,
-			domain: this.credentials.domain,
+			domain: this.credentials.redirectUri,
 			scope: 'openid email',
 			response_type: 'code',
 			address: this.credentials.clientId,
@@ -88,7 +88,7 @@ export class DimoHelper {
 	}
 
 	async submitChallenge(state: string, signature: string): Promise<any> {
-		const submitBody = `client_id=${this.credentials.clientId}&domain=${encodeURIComponent(this.credentials.domain)}&state=${state}&signature=${signature}&grant_type=authorization_code`;
+		const submitBody = `client_id=${this.credentials.clientId}&domain=${encodeURIComponent(this.credentials.redirectUri)}&state=${state}&signature=${signature}&grant_type=authorization_code`;
 
 		const submitResponse = await this.executeFunctions.helpers.request({
 			method: 'POST',
@@ -104,7 +104,7 @@ export class DimoHelper {
 	}
 
 	async getDeveloperJwt(): Promise<string> {
-		this.checkDomain();
+		this.checkRedirectUri();
 		const { challenge, state } = await this.generateChallenge();
 		const signature = await this.signChallenge(challenge);
 		const response = await this.submitChallenge(state, signature);
