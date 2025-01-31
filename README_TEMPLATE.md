@@ -9,7 +9,7 @@ DIMO is a connected car platform that allows users to take control over their ve
 [Installation](#installation)  
 [Operations](#operations)  
 [Credentials](#credentials)   
-[Compatibility](#compatibility)  
+[Usage](#usage)   
 [Resources](#resources)  
 
 ## Installation
@@ -51,16 +51,20 @@ Before getting started, you must sign up via the [DIMO Developer Console](https:
 
 ![Adding Credentials](/images/Credentials.jpg)
 
+## Usage
 
+Select the trigger you want to use to start the workflow, add the DIMO Node and specify which API you're accessing, and then connect to other actions as needed.
 
-## Compatibility
+![Workflow Sample](/images/WorkflowSample.png)
 
-_State the minimum n8n version, as well as which versions you test against. You can also include any known version incompatibility issues._
+Test custom queries prior to connecting additional actions to your workflow, and view the output data.
+
+![JSON Sample](/images/JSONSample.png)
 
 ## Resources
 
 * [n8n community nodes documentation](https://docs.n8n.io/integrations/community-nodes/)
-* _[DIMO Developer Documentation](https://docs.dimo.org/developer-platform)_
+* [DIMO Developer Documentation](https://docs.dimo.org/developer-platform)
 
 
 
