@@ -8,7 +8,7 @@ export class DimoApi implements ICredentialType {
   name = 'dimoApi';
   displayName = 'DIMO API';
   documentationUrl = 'https://docs.dimo.org/developer-platform';
-	icon: Icon = {light: 'file:/Dimo.svg', dark:'file:Dimo.svg',};
+	icon: Icon = { light: 'file:/Dimo.svg', dark:'file:Dimo.svg' };
 
   properties: INodeProperties[] = [
     {
