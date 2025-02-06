@@ -162,9 +162,7 @@ export class DimoHelper {
 			}
 
 			const decodedPermissions = this.decodePermissionBits(filteredSacd.permissions);
-			console.log('Raw permissions:', filteredSacd.permissions);
-			console.log('Decoded permissions:', decodedPermissions);
-			console.log('Permissions string:', decodedPermissions.join(','));
+
 			return decodedPermissions.join(',');
 
 		} catch (error: any) {
