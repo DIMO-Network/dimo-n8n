@@ -1,4 +1,5 @@
 import {
+	Icon,
 	ICredentialType,
 	INodeProperties,
 } from 'n8n-workflow'
@@ -7,6 +8,7 @@ export class DimoApi implements ICredentialType {
   name = 'dimoApi';
   displayName = 'DIMO API';
   documentationUrl = 'https://docs.dimo.org/developer-platform';
+	icon: Icon = { light: 'file:/Dimo.svg', dark:'file:Dimo.svg' };
 
   properties: INodeProperties[] = [
     {
@@ -18,11 +20,11 @@ export class DimoApi implements ICredentialType {
       required: true,
     },
     {
-      displayName: 'Domain',
-      name: 'domain',
+      displayName: 'Redirect URI',
+      name: 'redirectUri',
       type: 'string',
       default: '',
-      description: 'The domain associated with your DIMO app',
+      description: 'The redirectUri associated with your DIMO app',
       required: true,
     },
     {
