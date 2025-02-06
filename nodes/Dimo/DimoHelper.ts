@@ -1,16 +1,6 @@
 import { IExecuteFunctions, NodeOperationError } from 'n8n-workflow';
 import { ethers } from 'ethers';
 
-interface PermissionMapping {
-	[key: string]: string;
-}
-
-const PERMISSION_MAP: PermissionMapping = {
-	'0x3ffc': '1,2,3,4,5,6',
-	'0xffc': '1,2,3,4,5',
-	'0x3fcc': '1,3,4,5,6',
-};
-
 export class DimoHelper {
 	private credentials: any;
 	private executeFunctions: IExecuteFunctions;
@@ -112,6 +102,20 @@ export class DimoHelper {
 		return response.access_token;
 	}
 
+	private decodePermissionBits(permissionsHex: string): number[] {
+		const cleanHex = permissionsHex.toLowerCase().replace('0x','');
+		const permissionBits = BigInt(`0x${cleanHex}`);
+		const grantedPermissions: number[] = [];
+
+		for (let i = 0; i < 128; i++) {
+			const bitPair = (permissionBits >> BigInt(i * 2)) & BigInt(0b11);
+			if (bitPair === BigInt(0b011)) {
+				grantedPermissions.push(i);
+			}
+		}
+		return grantedPermissions;
+	}
+
 	async permissionsDecoder(tokenId: number): Promise<any> {
 		const developerLicense = this.credentials.clientId;
 
@@ -157,12 +161,12 @@ export class DimoHelper {
 				);
 			}
 
-			const permissions = PERMISSION_MAP[filteredSacd.permissions];
-			if (!permissions) {
-				throw new Error(`Unknown permission hex value: ${filteredSacd.permissions}`);
-			}
+			const decodedPermissions = this.decodePermissionBits(filteredSacd.permissions);
+			console.log('Raw permissions:', filteredSacd.permissions);
+			console.log('Decoded permissions:', decodedPermissions);
+			console.log('Permissions string:', decodedPermissions.join(','));
+			return decodedPermissions.join(',');
 
-			return permissions;
 		} catch (error: any) {
 			throw new Error(`Failed to decode permissions: ${error.message}`);
 		}
