@@ -130,12 +130,12 @@ export class Dimo implements INodeType {
 			const resource = this.getNodeParameter('resource', 0);
 			const helper = new DimoHelper(this, credentials);
 
-			const executedOperation = resourceOperations.get(resource);
-			if (!executedOperation) {
+			const executeOperation = resourceOperations.get(resource);
+			if (!executeOperation) {
 				throw new NodeOperationError(this.getNode(), `The resource ${resource} is not supported.`);
 			}
 
-			const result = await executedOperation(helper, operation);
+			const result = await executeOperation(helper, operation);
 			returnData.push({ json: result });
 			return [returnData];
 		} catch (error) {
