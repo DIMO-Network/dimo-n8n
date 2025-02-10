@@ -38,6 +38,18 @@ export class Dimo implements INodeType {
 		version: 1,
 		subtitle: '={{ $parameter["operation"] + ": " + $parameter["resource"] }}',
 		description: 'Interact with the DIMO API',
+		hints: [
+			{
+				message: 'It is recommended that you test your Identity queries in the Identity API Playground before using them in n8n: https://identity-api.dimo.zone/',
+				type: 'warning',
+				displayCondition: '={{ $parameter["resource"] === "identity" && $parameter["operation"] === "customIdentity" }}',
+			},
+			{
+				message: 'It is recommended that you test your Telemetry queries in the Telemetry API Playground before using them in n8n: https://telemetry-api.dimo.zone/',
+				type: 'warning',
+				displayCondition: '={{ $parameter["resource"] === "telemetry" && $parameter["operation"] === "customTelemetry" }}',
+			}
+		],
 		defaults: {
 			name: 'DIMO',
 		},
