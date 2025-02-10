@@ -1,8 +1,9 @@
 import { INodeProperties } from 'n8n-workflow';
 import { deviceDefinitionsProperties } from '../descriptions/DeviceDefinitionsDescription';
+import { DimoHelper } from '../DimoHelper';
 
 const deviceDefinitionsReqs = new Map([
-  ['decodeVin', async (helper: any, developerJwt: string, basePath: string) => {
+  ['decodeVin', async (helper: DimoHelper, developerJwt: string, basePath: string) => {
     const countryCode = helper.executeFunctions.getNodeParameter('countryCode', 0) as string;
     const vin = helper.executeFunctions.getNodeParameter('vin', 0) as string;
 
@@ -20,14 +21,18 @@ const deviceDefinitionsReqs = new Map([
     });
     return JSON.parse(response);
   }],
-  ['search', async (helper: any, developerJwt: string, basePath: string) => {
+  ['search', async (helper: DimoHelper, developerJwt: string, basePath: string) => {
     const searchParams: Record<string, string | number> = {};
     const paramList = ['query', 'makeSlug', 'modelSlug', 'year', 'page', 'pageSize'];
 
     for (const param of paramList) {
       const value = helper.executeFunctions.getNodeParameter(param, 0);
-      if (value !== null && value !== '') {
-        searchParams[param] = value;
+      if (value !== undefined && value !== null && value !== '') {
+        if (typeof value === 'string' || typeof value === 'number') {
+          searchParams[param] = value;
+        } else {
+          searchParams[param] = String(value);
+        }
       }
     }
 
@@ -38,7 +43,7 @@ const deviceDefinitionsReqs = new Map([
         Authorization: `Bearer ${developerJwt}`,
         'Content-Type': 'application/json',
       },
-      params: searchParams,
+      qs: searchParams,
     });
     return JSON.parse(response);
   }],
@@ -49,7 +54,7 @@ export const devicedefinitions = {
 		return deviceDefinitionsProperties;
 	},
 
-	async execute(helper: any, operation: string) {
+	async execute(helper: DimoHelper, operation: string) {
 		const developerJwt = await helper.getDeveloperJwt();
 
 		const basePath =

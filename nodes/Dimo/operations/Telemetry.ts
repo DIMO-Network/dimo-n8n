@@ -1,8 +1,9 @@
 import { INodeProperties } from 'n8n-workflow';
 import { telemetryProperties } from '../descriptions/TelemetryDescription';
+import { DimoHelper } from '../DimoHelper';
 
 const telemetryReqs = new Map([
-	['customTelemetry', async (helper: any, tokenId: number, vehicleJwt: string, basePath: string) => {
+	['customTelemetry', async (helper: DimoHelper, tokenId: number, vehicleJwt: string, basePath: string) => {
 		const customQuery = helper.executeFunctions.getNodeParameter('customTelemetryQuery', 0) as string;
 		const variablesStr = helper.executeFunctions.getNodeParameter('variables', 0) as string;
 		const variables = variablesStr ? JSON.parse(variablesStr) : {};
@@ -23,7 +24,7 @@ const telemetryReqs = new Map([
 
 		return JSON.parse(response);
 	}],
-	['getVehicleVin', async (helper: any, tokenId: number, vehicleJwt: string, basePath: string) => {
+	['getVehicleVin', async (helper: DimoHelper, tokenId: number, vehicleJwt: string, basePath: string) => {
 		const query = `{
 			vinVCLatest(tokenId: ${tokenId}){
 				vin
@@ -52,7 +53,7 @@ export const telemetry = {
 		return telemetryProperties;
 	},
 
-	async execute(helper: any, operation: string) {
+	async execute(helper: DimoHelper, operation: string) {
 		const developerJwt = await helper.getDeveloperJwt();
 		const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as number;
 		const privilegesString = await helper.permissionsDecoder(tokenId);

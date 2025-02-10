@@ -1,8 +1,9 @@
 import { INodeProperties } from 'n8n-workflow';
 import { attestationProperties } from '../descriptions/AttestationDescription';
+import { DimoHelper } from '../DimoHelper';
 
 const attestationReqs = new Map([
-  ['createVinVc', async (helper: any, tokenId: number, vehicleJwt: string, basePath: string) => {
+  ['createVinVc', async (helper: DimoHelper, tokenId: number, vehicleJwt: string, basePath: string) => {
     const response = await helper.executeFunctions.helpers.request({
       method: 'POST',
       url: `${basePath}/v1/vc/vin/${tokenId}`,
@@ -10,7 +11,7 @@ const attestationReqs = new Map([
         Authorization: `Bearer ${vehicleJwt}`,
         'Content-Type': 'application/json',
       },
-      params: { force: true },
+      qs: { force: true },
     });
 
     return {
@@ -18,7 +19,7 @@ const attestationReqs = new Map([
       response: response,
     };
   }],
-  ['createPomVc', async (helper: any, tokenId: number, vehicleJwt: string, basePath: string) => {
+  ['createPomVc', async (helper: DimoHelper, tokenId: number, vehicleJwt: string, basePath: string) => {
     const response = await helper.executeFunctions.helpers.request({
       method: 'POST',
       url: `${basePath}/v1/vc/pom/${tokenId}`,
@@ -40,7 +41,7 @@ export const attestation = {
 		return attestationProperties;
 	},
 
-	async execute(helper: any, operation: string) {
+	async execute(helper: DimoHelper, operation: string) {
 		const developerJwt = await helper.getDeveloperJwt();
 		const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as number;
 		const privilegesString = await helper.permissionsDecoder(tokenId);

@@ -1,8 +1,9 @@
 import { INodeProperties } from 'n8n-workflow';
 import { identityProperties } from '../descriptions/IdentityDescription';
+import { DimoHelper } from '../DimoHelper';
 
 const identityReqs = new Map([
-  ['customIdentity', async (helper: any, basePath: string) => {
+  ['customIdentity', async (helper: DimoHelper, basePath: string) => {
     const customQuery = helper.executeFunctions.getNodeParameter('customIdentityQuery', 0) as string;
     const variablesStr = helper.executeFunctions.getNodeParameter('variables', 0) as string;
     const variables = variablesStr ? JSON.parse(variablesStr) : {};
@@ -21,7 +22,7 @@ const identityReqs = new Map([
     });
     return JSON.parse(response);
   }],
-  ['countDimoVehicles', async (helper: any, basePath: string) => {
+  ['countDimoVehicles', async (helper: DimoHelper, basePath: string) => {
     const query = `{
       vehicles(first: 10) {
         totalCount
@@ -49,7 +50,7 @@ export const identity = {
 		return identityProperties;
 	},
 
-	async execute(helper: any, operation: string) {
+	async execute(helper: DimoHelper, operation: string) {
 		const basePath =
 			helper.credentials.environment === 'Dev'
 				? 'https://identity-api.dev.dimo.zone/query'

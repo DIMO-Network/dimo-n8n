@@ -19,10 +19,10 @@ export interface DimoApiCredentials {
 }
 
 export class DimoHelper {
-	private credentials: DimoApiCredentials;
-	private executeFunctions: IExecuteFunctions;
+	credentials: DimoApiCredentials;
+	executeFunctions: IExecuteFunctions;
 
-	constructor(executeFunctions: IExecuteFunctions, credentials: any) {
+	constructor(executeFunctions: IExecuteFunctions, credentials: DimoApiCredentials) {
 		this.executeFunctions = executeFunctions;
 		this.credentials = credentials;
 	}
@@ -119,7 +119,7 @@ export class DimoHelper {
 		return response.access_token;
 	}
 
-	async permissionsDecoder(tokenId: number): Promise<any> {
+	async permissionsDecoder(tokenId: number): Promise<string> {
 		const developerLicense = this.credentials.clientId;
 
 		const IDENTITY_QUERY = `{
@@ -175,7 +175,7 @@ export class DimoHelper {
 		}
 	}
 
-	async getVehicleJwt(devJwt: string, tokenId: number, privilegesString: string): Promise<any> {
+	async getVehicleJwt(devJwt: string, tokenId: number, privilegesString: string): Promise<string> {
 		const privileges = privilegesString.split(',').map((p) => parseInt(p.trim(), 10));
 		const vehicleJwtResponse = await this.executeFunctions.helpers.request({
 			method: 'POST',

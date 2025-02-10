@@ -1,8 +1,9 @@
 import { INodeProperties } from 'n8n-workflow';
 import { valuationsProperties } from '../descriptions/ValuationsDescription';
+import { DimoHelper } from '../DimoHelper';
 
 const valuationsReqs = new Map([
-	['valuationsLookup', async(helper: any, tokenId: number, vehicleJwt: string, basePath: string) => {
+	['valuationsLookup', async(helper: DimoHelper, tokenId: number, vehicleJwt: string, basePath: string) => {
 		const response = await helper.executeFunctions.helpers.request({
 			method: 'GET',
 			url: `${basePath}/v2/vehicles/${tokenId}/valuations`,
@@ -13,7 +14,7 @@ const valuationsReqs = new Map([
 		});
 		return JSON.parse(response);
 	}],
-	['getInstantOffer', async(helper: any, tokenId: number, vehicleJwt: string, basePath: string) => {
+	['getInstantOffer', async(helper: DimoHelper, tokenId: number, vehicleJwt: string, basePath: string) => {
 		const response = await helper.executeFunctions.helpers.request({
 			method: 'POST',
 			url: `${basePath}/v2/vehicles/${tokenId}/instant-offer`,
@@ -24,7 +25,7 @@ const valuationsReqs = new Map([
 		});
 		return JSON.parse(response);
 	}],
-	['listExistingOffers', async(helper: any, tokenId: number, vehicleJwt: string, basePath: string) => {
+	['listExistingOffers', async(helper: DimoHelper, tokenId: number, vehicleJwt: string, basePath: string) => {
 		const response = await helper.executeFunctions.helpers.request({
 			method: 'GET',
 			url: `${basePath}/v2/vehicles/${tokenId}/offers`,
@@ -42,7 +43,7 @@ export const valuations = {
 		return valuationsProperties;
 	},
 
-	async execute(helper: any, operation: string) {
+	async execute(helper: DimoHelper, operation: string) {
 		const developerJwt = await helper.getDeveloperJwt();
 		const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as number;
 		const privilegesString = await helper.permissionsDecoder(tokenId);
