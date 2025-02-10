@@ -5,7 +5,7 @@ import {
 	NodeOperationError,
 	INodeExecutionData,
 } from 'n8n-workflow';
-import { DimoHelper } from './DimoHelper';
+import { DimoHelper, DimoApiCredentials } from './DimoHelper';
 
 import { authentication } from './operations/Authentication';
 import { authenticationDescription } from './descriptions/AuthDescription';
@@ -31,13 +31,6 @@ const resourceOperations = new Map([
 	['trips', trips.execute],
 	['valuations', valuations.execute],
 ])
-
-interface DimoApiCredentials {
-	clientId: string;
-	redirectUri: string;
-	privateKey: string;
-	environment: string;
-}
 
 export class Dimo implements INodeType {
 	description: INodeTypeDescription = {
