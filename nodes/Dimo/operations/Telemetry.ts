@@ -1,7 +1,7 @@
 import { INodeProperties } from 'n8n-workflow';
 import { telemetryProperties } from '../descriptions/TelemetryDescription';
 
-const telemetryOperations = new Map([
+const telemetryReqs = new Map([
 	['customTelemetry', async (helper: any, tokenId: number, vehicleJwt: string, basePath: string) => {
 		const customQuery = helper.executeFunctions.getNodeParameter('customTelemetryQuery', 0) as string;
 		const variablesStr = helper.executeFunctions.getNodeParameter('variables', 0) as string;
@@ -64,7 +64,7 @@ export const telemetry = {
 				? 'https://telemetry-api.dev.dimo.zone/query'
 				: 'https://telemetry-api.dimo.zone/query';
 
-				const executeOperation = telemetryOperations.get(operation);
+				const executeOperation = telemetryReqs.get(operation);
 				if (!executeOperation) {
 					throw new Error(`The operation ${operation} is not supported.`);
 				}

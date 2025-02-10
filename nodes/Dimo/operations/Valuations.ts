@@ -1,7 +1,7 @@
 import { INodeProperties } from 'n8n-workflow';
 import { valuationsProperties } from '../descriptions/ValuationsDescription';
 
-const valuationsOperations = new Map([
+const valuationsReqs = new Map([
 	['valuationsLookup', async(helper: any, tokenId: number, vehicleJwt: string, basePath: string) => {
 		const response = await helper.executeFunctions.helpers.request({
 			method: 'GET',
@@ -54,7 +54,7 @@ export const valuations = {
 				? 'https://valuations-api.dev.dimo.zone'
 				: 'https://valuations-api.dimo.zone';
 
-		const executeOperation = valuationsOperations.get(operation);
+		const executeOperation = valuationsReqs.get(operation);
 		if (!executeOperation) {
 			throw new Error(`The operation ${operation} is not supported.`);
 		}
