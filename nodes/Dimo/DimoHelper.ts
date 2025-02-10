@@ -11,8 +11,15 @@ const PERMISSION_MAP: PermissionMapping = {
 	'0x3fcc': '1,3,4,5,6',
 };
 
+export interface DimoApiCredentials {
+	clientId: string;
+	redirectUri: string;
+	apiKey: string;
+	environment: string;
+}
+
 export class DimoHelper {
-	private credentials: any;
+	private credentials: DimoApiCredentials;
 	private executeFunctions: IExecuteFunctions;
 
 	constructor(executeFunctions: IExecuteFunctions, credentials: any) {
