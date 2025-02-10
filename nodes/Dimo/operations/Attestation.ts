@@ -1,6 +1,40 @@
 import { INodeProperties } from 'n8n-workflow';
 import { attestationProperties } from '../descriptions/AttestationDescription';
 
+const attestationReqs = new Map([
+  ['createVinVc', async (helper: any, tokenId: number, vehicleJwt: string, basePath: string) => {
+    const response = await helper.executeFunctions.helpers.request({
+      method: 'POST',
+      url: `${basePath}/v1/vc/vin/${tokenId}`,
+      headers: {
+        Authorization: `Bearer ${vehicleJwt}`,
+        'Content-Type': 'application/json',
+      },
+      params: { force: true },
+    });
+
+    return {
+      message: response.message,
+      response: response,
+    };
+  }],
+  ['createPomVc', async (helper: any, tokenId: number, vehicleJwt: string, basePath: string) => {
+    const response = await helper.executeFunctions.helpers.request({
+      method: 'POST',
+      url: `${basePath}/v1/vc/pom/${tokenId}`,
+      headers: {
+        Authorization: `Bearer ${vehicleJwt}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return {
+      message: response.message,
+      response: response,
+    };
+  }],
+]);
+
 export const attestation = {
 	getProperties(): INodeProperties[] {
 		return attestationProperties;
@@ -18,41 +52,11 @@ export const attestation = {
 				? 'https://attestation-api.dev.dimo.zone'
 				: 'https://attestation-api.dimo.zone';
 
-		switch (operation) {
-			case 'createVinVc':
-				const vinVcResponse = await helper.executeFunctions.helpers.request({
-					method: 'POST',
-					url: `${basePath}/v1/vc/vin/${tokenId}`,
-					headers: {
-						Authorization: `Bearer ${vehicleJwt}`,
-						'Content-Type': 'application/json',
-					},
-					params: { force: true },
-				});
-
-				return {
-					message: vinVcResponse.message,
-					vinVcResponse,
-				};
-
-			case `createPomVc`:
-				const pomVcResponse = await helper.executeFunctions.helpers.request({
-					method: 'POST',
-					url: `${basePath}/v1/vc/pom/${tokenId}`,
-					headers: {
-						Authorization: `Bearer ${vehicleJwt}`,
-						'Content-Type': 'application/json',
-					},
-				});
-
-				return {
-					message: pomVcResponse.message,
-					pomVcResponse,
-				};
-
-			default:
-				// TODO: Better errors
-				throw new Error(`The operation failed: ${operation}`);
+		const executeOperation = attestationReqs.get(operation);
+		if (!executeOperation) {
+			throw new Error(`The operation ${operation} is not supported.`);
 		}
+
+		return executeOperation(helper, tokenId, vehicleJwt, basePath);
 	},
 };
