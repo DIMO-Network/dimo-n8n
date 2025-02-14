@@ -5,7 +5,7 @@ import {
 	NodeOperationError,
 	INodeExecutionData,
 } from 'n8n-workflow';
-import { DimoHelper } from './DimoHelper';
+import { DimoHelper, DimoApiCredentials } from './DimoHelper';
 
 import { authentication } from './operations/Authentication';
 import { authenticationDescription } from './descriptions/AuthDescription';
@@ -22,12 +22,15 @@ import { tripsDescription } from './descriptions/TripsDescription';
 import { valuations } from './operations/Valuations';
 import { valuationsDescription } from './descriptions/ValuationsDescription';
 
-interface DimoApiCredentials {
-	clientId: string;
-	redirectUri: string;
-	privateKey: string;
-	environment: string;
-}
+const resourceOperations = new Map([
+	['authentication', authentication.execute],
+	['attestation', attestation.execute],
+	['devicedefinitions', devicedefinitions.execute],
+	['identity', identity.execute],
+	['telemetry', telemetry.execute],
+	['trips', trips.execute],
+	['valuations', valuations.execute],
+])
 
 export class Dimo implements INodeType {
 	description: INodeTypeDescription = {
@@ -132,37 +135,12 @@ export class Dimo implements INodeType {
 			const resource = this.getNodeParameter('resource', 0);
 			const helper = new DimoHelper(this, credentials);
 
-			let result;
-			switch (resource) {
-				case 'authentication':
-					result = await authentication.execute(helper, operation);
-					break;
-				case 'attestation':
-					result = await attestation.execute(helper, operation);
-					break;
-				case 'devicedefinitions':
-					result = await devicedefinitions.execute(helper, operation);
-					break;
-				case 'trips':
-					result = await trips.execute(helper, operation);
-					break;
-				case 'telemetry':
-					result = await telemetry.execute(helper, operation);
-					break;
-				case 'identity':
-					result = await identity.execute(helper, operation);
-					break;
-				case 'valuations':
-					result = await valuations.execute(helper, operation);
-					break;
-				default:
-					// TODO (Barrett): better errors
-					throw new NodeOperationError(
-						this.getNode(),
-						`Error: Resource: ${resource}, Operation: ${operation}, Credentials: ${credentials}, Helper: ${helper}`,
-					);
+			const executeOperation = resourceOperations.get(resource);
+			if (!executeOperation) {
+				throw new NodeOperationError(this.getNode(), `The resource ${resource} is not supported.`);
 			}
 
+			const result = await executeOperation(helper, operation);
 			returnData.push({ json: result });
 			return [returnData];
 		} catch (error) {

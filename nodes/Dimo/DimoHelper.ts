@@ -1,11 +1,18 @@
 import { IExecuteFunctions, NodeOperationError } from 'n8n-workflow';
 import { ethers } from 'ethers';
 
-export class DimoHelper {
-	private credentials: any;
-	private executeFunctions: IExecuteFunctions;
+export interface DimoApiCredentials {
+	clientId: string;
+	redirectUri: string;
+	apiKey: string;
+	environment: string;
+}
 
-	constructor(executeFunctions: IExecuteFunctions, credentials: any) {
+export class DimoHelper {
+	credentials: DimoApiCredentials;
+	executeFunctions: IExecuteFunctions;
+
+	constructor(executeFunctions: IExecuteFunctions, credentials: DimoApiCredentials) {
 		this.executeFunctions = executeFunctions;
 		this.credentials = credentials;
 	}
@@ -117,6 +124,7 @@ export class DimoHelper {
 	}
 
 	async permissionsDecoder(tokenId: number): Promise<any> {
+
 		const developerLicense = this.credentials.clientId;
 
 		const IDENTITY_QUERY = `{
@@ -170,7 +178,7 @@ export class DimoHelper {
 		}
 	}
 
-	async getVehicleJwt(devJwt: string, tokenId: number, privilegesString: string): Promise<any> {
+	async getVehicleJwt(devJwt: string, tokenId: number, privilegesString: string): Promise<string> {
 		const privileges = privilegesString.split(',').map((p) => parseInt(p.trim(), 10));
 		const vehicleJwtResponse = await this.executeFunctions.helpers.request({
 			method: 'POST',
