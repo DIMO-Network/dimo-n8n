@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-dimo-api",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "DIMO API Integration for n8n",
   "keywords": [
     "n8n-community-node-package"
