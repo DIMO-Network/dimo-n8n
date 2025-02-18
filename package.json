@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-dimo-api",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "DIMO API Integration for n8n",
   "keywords": [
     "n8n-community-node-package"
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jamesliupenn/dimo-n8n"
+    "url": "https://github.com/DIMO-Network/dimo-n8n"
   },
   "engines": {
     "node": ">=18.10",
