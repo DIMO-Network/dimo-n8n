@@ -56,3 +56,133 @@ export const vehicleEventsOperations: INodeProperties = {
 	default: 'getAllWebhooks',
 };
 
+export const vehicleEventsProperties: INodeProperties[] = [
+	{
+		displayName: 'Service',
+		name: 'service',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['vehicleEvents'],
+				operation: ['registerWebhook', 'updateWebhook'],
+			},
+		},
+		default: 'Telemetry',
+		description: 'The service to register the webhook for. Default is Telemetry.',
+		required: true,
+	},
+	{
+		displayName: 'Data',
+		name: 'data',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['vehicleEvents'],
+				operation: ['registerWebhook', 'updateWebhook'],
+			},
+		},
+		default: '',
+		description: 'The Telemetry field that the webhook will listen for events on',
+		required: true,
+	},
+	{
+		displayName: 'Trigger',
+		name: 'trigger',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['vehicleEvents'],
+				operation: ['registerWebhook', 'updateWebhook'],
+			},
+		},
+		default: 'valueNumber',
+		description: 'The trigger that the webhook will be listening for. You can use the following condition statements &gt;= , &lt;=, &gt;, &lt;, =.',
+		required: true,
+	},
+	{
+		displayName: 'Setup',
+		name: 'setup',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['vehicleEvents'],
+				operation: ['registerWebhook', 'updateWebhook'],
+			},
+		},
+		default: '',
+		description: 'Should be Realtime, Hourly, or Daily',
+		required: true,
+	},
+	{
+		displayName: 'Description',
+		name: 'description',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['vehicleEvents'],
+				operation: ['registerWebhook', 'updateWebhook'],
+			},
+		},
+		default: '',
+		description: 'A description of the webhook for your records',
+		required: true,
+	},
+	{
+		displayName: 'Target URI',
+		name: 'targetUri',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['vehicleEvents'],
+				operation: ['registerWebhook', 'updateWebhook'],
+			},
+		},
+		default: '',
+		description: 'The URI that the webhook will send the event to',
+		required: true,
+	},
+	{
+		displayName: 'Status',
+		name: 'status',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['vehicleEvents'],
+				operation: ['registerWebhook', 'updateWebhook'],
+			},
+		},
+		default: 'Active',
+		description: 'The status of the webhook',
+		required: true,
+	},
+	{
+		displayName: 'Webhook ID',
+		name: 'id',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['vehicleEvents'],
+				operation: ['deleteWebhook', 'updateWebhook'],
+			},
+		},
+		default: '',
+		description: 'The ID of the webhook that you are deleting or updating',
+		required: true,
+	},
+	{
+		displayName: 'Token ID',
+		name: 'tokenId',
+		type: 'number',
+		displayOptions: {
+			show: {
+				resource: ['vehicleEvents'],
+				operation: ['subscribeVehicletoWebhook', 'unsubscribeVehicleFromWebhook'],
+			},
+		},
+		default: 0,
+		description: 'The Token ID of the vehicle for the webhook subscription',
+		required: true,
+	},
+
+
+];
