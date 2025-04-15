@@ -7,7 +7,7 @@ export const vehicleEventsOperations: INodeProperties = {
 	noDataExpression: true,
 	displayOptions: {
 		show: {
-			resource: ['vehicleEvents'],
+			resource: ['vehicleevents'],
 		},
 	},
 	// BARRETT TO DO: Separate by Webhooks vs Vehicle
@@ -63,7 +63,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleEvents'],
+				resource: ['vehicleevents'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -77,7 +77,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleEvents'],
+				resource: ['vehicleevents'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -91,7 +91,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleEvents'],
+				resource: ['vehicleevents'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -105,7 +105,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleEvents'],
+				resource: ['vehicleevents'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -119,7 +119,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleEvents'],
+				resource: ['vehicleevents'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -133,7 +133,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleEvents'],
+				resource: ['vehicleevents'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -147,7 +147,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleEvents'],
+				resource: ['vehicleevents'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -161,8 +161,8 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleEvents'],
-				operation: ['deleteWebhook', 'updateWebhook'],
+				resource: ['vehicleevents'],
+				operation: ['deleteWebhook', 'updateWebhook', 'subscribeVehicleToWebhook', 'unsubscribeVehicleFromWebhook'],
 			},
 		},
 		default: '',
@@ -175,14 +175,17 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'number',
 		displayOptions: {
 			show: {
-				resource: ['vehicleEvents'],
-				operation: ['subscribeVehicletoWebhook', 'unsubscribeVehicleFromWebhook'],
+				resource: ['vehicleevents'],
+				operation: ['subscribeVehicleToWebhook', 'unsubscribeVehicleFromWebhook', 'getVehicleWebhookSubscriptions'],
 			},
 		},
 		default: 0,
 		description: 'The Token ID of the vehicle for the webhook subscription',
 		required: true,
 	},
-
-
 ];
+
+export const vehicleEventsDescription = {
+	operations: vehicleEventsOperations,
+	properties: vehicleEventsProperties,
+};
