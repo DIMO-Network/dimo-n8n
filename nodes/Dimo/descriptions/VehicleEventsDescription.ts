@@ -102,15 +102,32 @@ export const vehicleEventsProperties: INodeProperties[] = [
 	{
 		displayName: 'Setup',
 		name: 'setup',
-		type: 'string',
+		type: 'options',
+		options: [
+			{
+				name: 'Realtime',
+				value: 'Realtime',
+				description: 'Continues firing as long as the condition remains true',
+			},
+			{
+				name: 'Hourly',
+				value: 'Hourly',
+				description: 'Fires every hour as long as the condition remains true',
+			},
+			{
+				name: 'Daily',
+				value: 'Daily',
+				description: 'Fires every day as long as the condition remains true',
+			},
+		],
 		displayOptions: {
 			show: {
 				resource: ['vehicleevents'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
-		default: '',
-		description: 'Should be Realtime, Hourly, or Daily',
+		default: 'Realtime',
+		description: 'How often the webhook should fire when conditions are met',
 		required: true,
 	},
 	{
