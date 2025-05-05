@@ -43,9 +43,19 @@ export const vehicleEventsOperations: INodeProperties = {
 			action: 'Register webhook',
 		},
 		{
+			name: 'Subscribe All Vehicles to Webhook',
+			value: 'subscribeAllVehiclesToWebhook',
+			action: 'Subscribe all vehicles to webhook',
+		},
+		{
 			name: 'Subscribe Vehicle to Webhook',
 			value: 'subscribeVehicleToWebhook',
 			action: 'Subscribe vehicle to webhook',
+		},
+		{
+			name: 'Unsubscribe All Vehicles From Webhook',
+			value: 'unsubscribeAllVehiclesFromWebhook',
+			action: 'Unsubscribe all vehicles from webhook',
 		},
 		{
 			name: 'Unsubscribe Vehicle From Webhook',
@@ -179,12 +189,12 @@ export const vehicleEventsProperties: INodeProperties[] = [
 	},
 	{
 		displayName: 'Webhook ID',
-		name: 'id',
+		name: 'webhookId',
 		type: 'string',
 		displayOptions: {
 			show: {
 				resource: ['vehicleevents'],
-				operation: ['deleteWebhook', 'updateWebhook', 'subscribeVehicleToWebhook', 'unsubscribeVehicleFromWebhook'],
+				operation: ['deleteWebhook', 'updateWebhook', 'subscribeVehicleToWebhook', 'unsubscribeVehicleFromWebhook', 'subscribeAllVehiclesToWebhook', 'unsubscribeAllVehiclesFromWebhook', 'listVehiclesSubscribedToWebhook'],
 			},
 		},
 		default: '',
