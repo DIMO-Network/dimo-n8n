@@ -33,6 +33,11 @@ export const vehicleEventsOperations: INodeProperties = {
 			action: 'Get webhook signal names',
 		},
 		{
+			name: 'List Vehicles Subscribed to Webhook',
+			value: 'listVehiclesSubscribedToWebhook',
+			action: 'List vehicles subscribed to webhook',
+		},
+		{
 			name: 'Register Webhook',
 			value: 'registerWebhook',
 			action: 'Register webhook',

@@ -6,7 +6,7 @@ const vehicleEventsReqs = new Map([
   ['getAllWebhooks', async (helper: DimoHelper, developerJwt: string, basePath: string) => {
     const response = await helper.executeFunctions.helpers.request({
       method: 'GET',
-      url: `${basePath}/webhooks`,
+      url: `${basePath}/v1/webhooks`,
       headers: {
         Authorization: `Bearer ${developerJwt}`,
         'Content-Type': 'application/json',
@@ -26,7 +26,7 @@ const vehicleEventsReqs = new Map([
 
     const response = await helper.executeFunctions.helpers.request({
       method: 'POST',
-      url: `${basePath}/webhooks`,
+      url: `${basePath}/v1/webhooks`,
       headers: {
         Authorization: `Bearer ${developerJwt}`,
         'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ const vehicleEventsReqs = new Map([
 
     const response = await helper.executeFunctions.helpers.request({
       method: 'DELETE',
-      url: `${basePath}/webhooks/${id}`,
+      url: `${basePath}/v1/webhooks/${id}`,
       headers: {
         Authorization: `Bearer ${developerJwt}`,
         'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ const vehicleEventsReqs = new Map([
 
     const response = await helper.executeFunctions.helpers.request({
       method: 'PUT',
-      url: `${basePath}/webhooks/${id}`,
+      url: `${basePath}/v1/webhooks/${id}`,
       headers: {
         Authorization: `Bearer ${developerJwt}`,
         'Content-Type': 'application/json',
@@ -133,10 +133,21 @@ const vehicleEventsReqs = new Map([
     return JSON.parse(response);
   }],
 
+	// NEW ONE VVV
+	['listVehiclesSubscribedToWebhook', async (helper: DimoHelper, developerJwt: string, basePath: string) => {
+		const webhookId = helper.executeFunctions.getNodeParameter('webhookId', 0) as string;
+
+		const response = await helper.executeFunctions.helpers.request({
+			method: 'GET',
+			url: `${basePath}/v1/webhooks/${webhookId}`,
+		});
+		return JSON.parse(response);
+	}],
+
   ['getWebhookSignalNames', async (helper: DimoHelper, developerJwt: string, basePath: string) => {
     const response = await helper.executeFunctions.helpers.request({
       method: 'GET',
-      url: `${basePath}/webhooks/signals`,
+      url: `${basePath}/v1/webhooks/signals`,
       headers: {
         Authorization: `Bearer ${developerJwt}`,
         'Content-Type': 'application/json',
