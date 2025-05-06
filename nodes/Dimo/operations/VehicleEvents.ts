@@ -23,6 +23,7 @@ const vehicleEventsReqs = new Map([
     const description = helper.executeFunctions.getNodeParameter('description', 0) as string;
     const targetUri = helper.executeFunctions.getNodeParameter('targetUri', 0) as string;
     const status = helper.executeFunctions.getNodeParameter('status', 0) as string;
+		const verificationToken = helper.executeFunctions.getNodeParameter('verificationToken', 0) as string;
 
     const response = await helper.executeFunctions.helpers.request({
       method: 'POST',
@@ -39,6 +40,7 @@ const vehicleEventsReqs = new Map([
         description,
         target_uri: targetUri,
         status,
+        verification_token: verificationToken,
       }),
     });
     return JSON.parse(response);
@@ -67,6 +69,7 @@ const vehicleEventsReqs = new Map([
     const description = helper.executeFunctions.getNodeParameter('description', 0) as string;
     const targetUri = helper.executeFunctions.getNodeParameter('targetUri', 0) as string;
     const status = helper.executeFunctions.getNodeParameter('status', 0) as string;
+		const verificationToken = helper.executeFunctions.getNodeParameter('verificationToken', 0) as string;
 
     const response = await helper.executeFunctions.helpers.request({
       method: 'PUT',
@@ -83,6 +86,7 @@ const vehicleEventsReqs = new Map([
         description,
         target_uri: targetUri,
         status,
+        verification_token: verificationToken,
       }),
     });
     return JSON.parse(response);
@@ -120,7 +124,7 @@ const vehicleEventsReqs = new Map([
 	}],
 
   ['unsubscribeVehicleFromWebhook', async (helper: DimoHelper, developerJwt: string, basePath: string) => {
-    const webhookId = helper.executeFunctions.getNodeParameter('id', 0) as string;
+    const webhookId = helper.executeFunctions.getNodeParameter('webhookId', 0) as string;
     const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as string;
 
     const response = await helper.executeFunctions.helpers.request({

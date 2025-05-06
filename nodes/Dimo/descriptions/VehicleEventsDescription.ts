@@ -10,7 +10,6 @@ export const vehicleEventsOperations: INodeProperties = {
 			resource: ['vehicleevents'],
 		},
 	},
-	// BARRETT TO DO: Separate by Webhooks vs Vehicle
 	options: [
 		{
 			name: 'Delete Webhook',
@@ -185,6 +184,20 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		},
 		default: 'Active',
 		description: 'The status of the webhook',
+		required: true,
+	},
+	{
+		displayName: 'Verification Token',
+		name: 'verificationToken',
+		type: 'string',
+		displayOptions: {
+			show: {
+				resource: ['vehicleevents'],
+				operation: ['registerWebhook', 'updateWebhook'],
+			},
+		},
+		default: '',
+		description: 'The plain/text string that must be returned by your target_uri webhook listener',
 		required: true,
 	},
 	{
