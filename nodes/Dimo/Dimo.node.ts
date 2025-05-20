@@ -21,6 +21,8 @@ import { trips } from './operations/Trips';
 import { tripsDescription } from './descriptions/TripsDescription';
 import { valuations } from './operations/Valuations';
 import { valuationsDescription } from './descriptions/ValuationsDescription';
+import { vehicleEvents } from './operations/VehicleEvents';
+import { vehicleEventsDescription } from './descriptions/VehicleEventsDescription';
 
 const resourceOperations = new Map([
 	['authentication', authentication.execute],
@@ -30,6 +32,7 @@ const resourceOperations = new Map([
 	['telemetry', telemetry.execute],
 	['trips', trips.execute],
 	['valuations', valuations.execute],
+	['vehicleevents', vehicleEvents.execute],
 ])
 
 export class Dimo implements INodeType {
@@ -99,6 +102,10 @@ export class Dimo implements INodeType {
 						name: 'Valuations API',
 						value: 'valuations',
 					},
+					{
+						name: 'Vehicle Events API',
+						value: 'vehicleevents',
+					},
 				],
 				default: 'attestation',
 			},
@@ -123,6 +130,9 @@ export class Dimo implements INodeType {
 			// Valuations Options
 			valuationsDescription.operations,
 			...valuationsDescription.properties,
+			// Vehicle Events Options
+			vehicleEventsDescription.operations,
+			...vehicleEventsDescription.properties,
 		],
 	};
 
