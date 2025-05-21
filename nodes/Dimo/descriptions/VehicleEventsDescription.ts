@@ -190,6 +190,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		displayName: 'Verification Token',
 		name: 'verificationToken',
 		type: 'string',
+		typeOptions: { password: true },
 		displayOptions: {
 			show: {
 				resource: ['vehicleevents'],
