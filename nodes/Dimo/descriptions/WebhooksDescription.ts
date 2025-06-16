@@ -1,13 +1,13 @@
 import { INodeProperties } from 'n8n-workflow';
 
-export const vehicleEventsOperations: INodeProperties = {
+export const webhooksOperations: INodeProperties = {
 	displayName: 'Operation',
 	name: 'operation',
 	type: 'options',
 	noDataExpression: true,
 	displayOptions: {
 		show: {
-			resource: ['vehicleevents'],
+			resource: ['webhooks'],
 		},
 	},
 	options: [
@@ -70,14 +70,27 @@ export const vehicleEventsOperations: INodeProperties = {
 	default: 'getAllWebhooks',
 };
 
-export const vehicleEventsProperties: INodeProperties[] = [
+export const webhooksProperties: INodeProperties[] = [
+	{
+		displayName: 'Resource',
+		name: 'resource',
+		type: 'options',
+		noDataExpression: true,
+		options: [
+			{
+				name: 'Webhooks',
+				value: 'webhooks',
+			},
+		],
+		default: 'webhooks',
+	},
 	{
 		displayName: 'Service',
 		name: 'service',
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -91,7 +104,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -105,7 +118,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -136,7 +149,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		],
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -150,7 +163,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -164,7 +177,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -178,7 +191,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -193,7 +206,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		typeOptions: { password: true },
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -207,7 +220,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['deleteWebhook', 'updateWebhook', 'subscribeVehicleToWebhook', 'unsubscribeVehicleFromWebhook', 'subscribeAllVehiclesToWebhook', 'unsubscribeAllVehiclesFromWebhook', 'listVehiclesSubscribedToWebhook'],
 			},
 		},
@@ -221,7 +234,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'number',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['subscribeVehicleToWebhook', 'unsubscribeVehicleFromWebhook', 'getVehicleWebhookSubscriptions'],
 			},
 		},
@@ -231,7 +244,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 	},
 ];
 
-export const vehicleEventsDescription = {
-	operations: vehicleEventsOperations,
-	properties: vehicleEventsProperties,
+export const webhooksDescription = {
+	operations: webhooksOperations,
+	properties: webhooksProperties,
 };

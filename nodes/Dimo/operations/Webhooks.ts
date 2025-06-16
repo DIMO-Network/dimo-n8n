@@ -1,8 +1,8 @@
 import { INodeProperties } from 'n8n-workflow';
-import { vehicleEventsProperties } from '../descriptions/VehicleEventsDescription';
+import { webhooksProperties } from '../descriptions/WebhooksDescription';
 import { DimoHelper } from '../DimoHelper';
 
-const vehicleEventsReqs = new Map([
+const webhooksReqs = new Map([
   ['getAllWebhooks', async (helper: DimoHelper, developerJwt: string, basePath: string) => {
     const response = await helper.executeFunctions.helpers.request({
       method: 'GET',
@@ -193,9 +193,9 @@ const vehicleEventsReqs = new Map([
   }],
 ]);
 
-export const vehicleEvents = {
+export const webhooks = {
 	getProperties(): INodeProperties[] {
-		return vehicleEventsProperties;
+		return webhooksProperties;
 	},
 
 	async execute(helper: DimoHelper, operation: string) {
@@ -206,7 +206,7 @@ export const vehicleEvents = {
 				? 'https://vehicle-events-api.dev.dimo.zone'
 				: 'https://vehicle-events-api.dimo.zone';
 
-		const executeOperation = vehicleEventsReqs.get(operation);
+		const executeOperation = webhooksReqs.get(operation);
 		if (!executeOperation) {
 			throw new Error(`The operation ${operation} is not supported.`);
 		}

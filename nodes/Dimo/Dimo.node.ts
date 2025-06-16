@@ -21,8 +21,8 @@ import { trips } from './operations/Trips';
 import { tripsDescription } from './descriptions/TripsDescription';
 import { valuations } from './operations/Valuations';
 import { valuationsDescription } from './descriptions/ValuationsDescription';
-import { vehicleEvents } from './operations/VehicleEvents';
-import { vehicleEventsDescription } from './descriptions/VehicleEventsDescription';
+import { webhooks } from './operations/Webhooks';
+import { webhooksDescription } from './descriptions/WebhooksDescription';
 
 const resourceOperations = new Map([
 	['authentication', authentication.execute],
@@ -32,7 +32,7 @@ const resourceOperations = new Map([
 	['telemetry', telemetry.execute],
 	['trips', trips.execute],
 	['valuations', valuations.execute],
-	['vehicleevents', vehicleEvents.execute],
+	['webhooks', webhooks.execute],
 ])
 
 export class Dimo implements INodeType {
@@ -67,6 +67,13 @@ export class Dimo implements INodeType {
 				required: true,
 			},
 		],
+		requestDefaults: {
+			baseURL: 'https://api.dimo.zone',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+		},
 		properties: [
 			{
 				displayName: 'Resource',
@@ -103,8 +110,8 @@ export class Dimo implements INodeType {
 						value: 'valuations',
 					},
 					{
-						name: 'Vehicle Events API',
-						value: 'vehicleevents',
+						name: 'Webhooks API',
+						value: 'webhooks',
 					},
 				],
 				default: 'attestation',
@@ -130,9 +137,9 @@ export class Dimo implements INodeType {
 			// Valuations Options
 			valuationsDescription.operations,
 			...valuationsDescription.properties,
-			// Vehicle Events Options
-			vehicleEventsDescription.operations,
-			...vehicleEventsDescription.properties,
+			// Webhooks Options
+			webhooksDescription.operations,
+			...webhooksDescription.properties,
 		],
 	};
 
