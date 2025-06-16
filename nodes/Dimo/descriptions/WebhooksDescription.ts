@@ -72,19 +72,6 @@ export const webhooksOperations: INodeProperties = {
 
 export const webhooksProperties: INodeProperties[] = [
 	{
-		displayName: 'Resource',
-		name: 'resource',
-		type: 'options',
-		noDataExpression: true,
-		options: [
-			{
-				name: 'Webhooks',
-				value: 'webhooks',
-			},
-		],
-		default: 'webhooks',
-	},
-	{
 		displayName: 'Service',
 		name: 'service',
 		type: 'string',
