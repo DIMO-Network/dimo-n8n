@@ -1,13 +1,13 @@
 import { INodeProperties } from 'n8n-workflow';
 
-export const vehicleEventsOperations: INodeProperties = {
+export const webhooksOperations: INodeProperties = {
 	displayName: 'Operation',
 	name: 'operation',
 	type: 'options',
 	noDataExpression: true,
 	displayOptions: {
 		show: {
-			resource: ['vehicleevents'],
+			resource: ['webhooks'],
 		},
 	},
 	options: [
@@ -70,14 +70,14 @@ export const vehicleEventsOperations: INodeProperties = {
 	default: 'getAllWebhooks',
 };
 
-export const vehicleEventsProperties: INodeProperties[] = [
+export const webhooksProperties: INodeProperties[] = [
 	{
 		displayName: 'Service',
 		name: 'service',
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -88,14 +88,76 @@ export const vehicleEventsProperties: INodeProperties[] = [
 	{
 		displayName: 'Data',
 		name: 'data',
-		type: 'string',
+		type: 'options',
+		options: [
+			{
+				name: 'Battery Current Power',
+				value: 'powertrainTractionBatteryCurrentPower',
+				description: 'Current electrical energy flowing in/out of battery. Positive = Energy flowing in to battery, e.g. during charging. Negative = Energy flowing out of battery, e.g. during driving.',
+		},
+			{
+				name: 'Battery Is Charging',
+				value: 'powertrainTractionBatteryChargingIsCharging',
+				description: 'True if charging is ongoing. Charging is considered to be ongoing if energy is flowing from charger to vehicle. True (1) - Vehicle is charging.False (0) - Vehicle is not charging.',
+			},
+			{
+				name: 'Charge Level',
+				value: 'powertrainTractionBatteryStateOfChargeCurrent',
+				description: 'Physical state of charge of the high voltage battery, relative to net capacity. This is not necessarily the state of charge being displayed to the customer.',
+			},
+			{
+				name: 'Fuel Level in Liters',
+				value: 'powertrainFuelSystemAbsoluteLevel',
+				description: 'TCurrent available fuel in the fuel tank expressed in litersbd',
+			},
+			{
+				name: 'Fuel Level Percentage',
+				value: 'powertrainFuelSystemRelativeLevel',
+				description: 'Current available fuel in the fuel tank in %, from 0 to 100',
+			},
+			{
+				name: 'Is Ignition On',
+				value: 'isIgnitionOn',
+				description: 'Vehicle ignition status. True (1) = Vehicle Ignition On. False (0) = Vehicle Ignition Off',
+			},
+			{
+				name: 'Odometer',
+				value: 'powertrainTransmissionTravelledDistance',
+				description: 'Odometer reading in kilometers, total distance travelled during the lifetime of the transmission',
+			},
+			{
+				name: 'Speed',
+				value: 'speed',
+				description: 'The vehicle speed in km/hr',
+			},
+			{
+				name: 'Tire Pressure - Back Left',
+				value: 'chassisAxleRow2WheelLeftTirePressure',
+				description: 'Tire pressure of the rear left tire in kilo-Pascal',
+			},
+			{
+				name: 'Tire Pressure - Back Right',
+				value: 'chassisAxleRow2WheelRightTirePressure',
+				description: 'Tire pressure of the rear right tire in kilo-Pascal',
+			},
+			{
+				name: 'Tire Pressure - Front Left',
+				value: 'chassisAxleRow1WheelLeftTirePressure',
+				description: 'Tire pressure of the front left tire in kilo-Pascal',
+			},
+			{
+				name: 'Tire Pressure - Front Right',
+				value: 'chassisAxleRow1WheelRightTirePressure',
+				description: 'Tire pressure of the front right tire in kilo-Pasca',
+			},
+		],
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
-		default: '',
+		default: 'powertrainTransmissionTravelledDistance',
 		description: 'The Telemetry field that the webhook will listen for events on',
 		required: true,
 	},
@@ -105,7 +167,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -136,7 +198,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		],
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -150,7 +212,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -164,7 +226,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -178,7 +240,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -190,9 +252,10 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		displayName: 'Verification Token',
 		name: 'verificationToken',
 		type: 'string',
+		typeOptions: { password: true },
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
@@ -206,7 +269,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'string',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['deleteWebhook', 'updateWebhook', 'subscribeVehicleToWebhook', 'unsubscribeVehicleFromWebhook', 'subscribeAllVehiclesToWebhook', 'unsubscribeAllVehiclesFromWebhook', 'listVehiclesSubscribedToWebhook'],
 			},
 		},
@@ -220,7 +283,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 		type: 'number',
 		displayOptions: {
 			show: {
-				resource: ['vehicleevents'],
+				resource: ['webhooks'],
 				operation: ['subscribeVehicleToWebhook', 'unsubscribeVehicleFromWebhook', 'getVehicleWebhookSubscriptions'],
 			},
 		},
@@ -230,7 +293,7 @@ export const vehicleEventsProperties: INodeProperties[] = [
 	},
 ];
 
-export const vehicleEventsDescription = {
-	operations: vehicleEventsOperations,
-	properties: vehicleEventsProperties,
+export const webhooksDescription = {
+	operations: webhooksOperations,
+	properties: webhooksProperties,
 };
