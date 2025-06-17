@@ -108,7 +108,7 @@ export const webhooksProperties: INodeProperties[] = [
 			{
 				name: 'Fuel Level in Liters',
 				value: 'powertrainFuelSystemAbsoluteLevel',
-				description: 'TCurrent available fuel in the fuel tank expressed in litersbd',
+				description: 'Current available fuel in the fuel tank expressed in liters',
 			},
 			{
 				name: 'Fuel Level Percentage',
@@ -148,7 +148,7 @@ export const webhooksProperties: INodeProperties[] = [
 			{
 				name: 'Tire Pressure - Front Right',
 				value: 'chassisAxleRow1WheelRightTirePressure',
-				description: 'Tire pressure of the front right tire in kilo-Pasca',
+				description: 'Tire pressure of the front right tire in kilo-Pascal',
 			},
 		],
 		displayOptions: {
