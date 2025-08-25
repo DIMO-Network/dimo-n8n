@@ -17,11 +17,12 @@ const webhooksReqs = new Map([
 
   ['registerWebhook', async (helper: DimoHelper, developerJwt: string, basePath: string) => {
     const service = helper.executeFunctions.getNodeParameter('service', 0) as string;
-    const data = helper.executeFunctions.getNodeParameter('data', 0) as string;
-    const trigger = helper.executeFunctions.getNodeParameter('trigger', 0) as string;
-    const setup = helper.executeFunctions.getNodeParameter('setup', 0) as string;
+    const metricName = helper.executeFunctions.getNodeParameter('metricName', 0) as string;
+    const condition = helper.executeFunctions.getNodeParameter('condition', 0) as string;
+    const coolDownPeriod = helper.executeFunctions.getNodeParameter('coolDownPeriod', 0) as number;
     const description = helper.executeFunctions.getNodeParameter('description', 0) as string;
-    const targetUri = helper.executeFunctions.getNodeParameter('targetUri', 0) as string;
+    const displayName = helper.executeFunctions.getNodeParameter('displayName', 0) as string;
+    const targetURL = helper.executeFunctions.getNodeParameter('targetURL', 0) as string;
     const status = helper.executeFunctions.getNodeParameter('status', 0) as string;
 		const verificationToken = helper.executeFunctions.getNodeParameter('verificationToken', 0) as string;
 
@@ -34,13 +35,14 @@ const webhooksReqs = new Map([
       },
       body: JSON.stringify({
         service,
-        data,
-        trigger,
-        setup,
+        metricName,
+        condition,
+        coolDownPeriod,
         description,
-        target_uri: targetUri,
+        displayName,
+        targetURL,
         status,
-        verification_token: verificationToken,
+        verificationToken,
       }),
     });
     return JSON.parse(response);
@@ -63,11 +65,12 @@ const webhooksReqs = new Map([
   ['updateWebhook', async (helper: DimoHelper, developerJwt: string, basePath: string) => {
     const webhookId = helper.executeFunctions.getNodeParameter('webhookId', 0) as string;
     const service = helper.executeFunctions.getNodeParameter('service', 0) as string;
-    const data = helper.executeFunctions.getNodeParameter('data', 0) as string;
-    const trigger = helper.executeFunctions.getNodeParameter('trigger', 0) as string;
-    const setup = helper.executeFunctions.getNodeParameter('setup', 0) as string;
+    const metricName = helper.executeFunctions.getNodeParameter('metricName', 0) as string;
+    const condition = helper.executeFunctions.getNodeParameter('condition', 0) as string;
+    const coolDownPeriod = helper.executeFunctions.getNodeParameter('coolDownPeriod', 0) as number;
     const description = helper.executeFunctions.getNodeParameter('description', 0) as string;
-    const targetUri = helper.executeFunctions.getNodeParameter('targetUri', 0) as string;
+    const displayName = helper.executeFunctions.getNodeParameter('displayName', 0) as string;
+    const targetURL = helper.executeFunctions.getNodeParameter('targetURL', 0) as string;
     const status = helper.executeFunctions.getNodeParameter('status', 0) as string;
 		const verificationToken = helper.executeFunctions.getNodeParameter('verificationToken', 0) as string;
 
@@ -80,13 +83,14 @@ const webhooksReqs = new Map([
       },
       body: JSON.stringify({
         service,
-        data,
-        trigger,
-        setup,
+        metricName,
+        condition,
+        coolDownPeriod,
         description,
-        target_uri: targetUri,
+        displayName,
+        targetURL,
         status,
-        verification_token: verificationToken,
+        verificationToken,
       }),
     });
     return JSON.parse(response);
@@ -94,11 +98,11 @@ const webhooksReqs = new Map([
 
   ['subscribeVehicleToWebhook', async (helper: DimoHelper, developerJwt: string, basePath: string) => {
     const webhookId = helper.executeFunctions.getNodeParameter('webhookId', 0) as string;
-    const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as string;
+    const tokenDid = helper.executeFunctions.getNodeParameter('tokenDid', 0) as string;
 
     const response = await helper.executeFunctions.helpers.request({
       method: 'POST',
-      url: `${basePath}/v1/webhooks/${webhookId}/subscribe/${tokenId}`,
+      url: `${basePath}/v1/webhooks/${webhookId}/subscribe/${tokenDid}`,
       headers: {
         Authorization: `Bearer ${developerJwt}`,
         'Content-Type': 'application/json',
@@ -125,11 +129,11 @@ const webhooksReqs = new Map([
 
   ['unsubscribeVehicleFromWebhook', async (helper: DimoHelper, developerJwt: string, basePath: string) => {
     const webhookId = helper.executeFunctions.getNodeParameter('webhookId', 0) as string;
-    const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as string;
+    const tokenDid = helper.executeFunctions.getNodeParameter('tokenDid', 0) as string;
 
     const response = await helper.executeFunctions.helpers.request({
       method: 'DELETE',
-      url: `${basePath}/v1/webhooks/${webhookId}/unsubscribe/${tokenId}`,
+      url: `${basePath}/v1/webhooks/${webhookId}/unsubscribe/${tokenDid}`,
       headers: {
         Authorization: `Bearer ${developerJwt}`,
         'Content-Type': 'application/json',
@@ -153,11 +157,11 @@ const webhooksReqs = new Map([
 	}],
 
   ['getVehicleWebhookSubscriptions', async (helper: DimoHelper, developerJwt: string, basePath: string) => {
-    const tokenId = helper.executeFunctions.getNodeParameter('tokenId', 0) as string;
+    const tokenDid = helper.executeFunctions.getNodeParameter('tokenDid', 0) as string;
 
     const response = await helper.executeFunctions.helpers.request({
       method: 'GET',
-      url: `${basePath}/v1/webhooks/vehicles/${tokenId.toString()}`,
+      url: `${basePath}/v1/webhooks/vehicles/${tokenDid}`,
       headers: {
         Authorization: `Bearer ${developerJwt}`,
         'Content-Type': 'application/json',
@@ -203,8 +207,8 @@ export const webhooks = {
 
 		const basePath =
 			helper.credentials.environment === 'Dev'
-				? 'https://vehicle-events-api.dev.dimo.zone'
-				: 'https://vehicle-events-api.dimo.zone';
+				? 'https://vehicle-triggers-api.dev.dimo.zone'
+				: 'https://vehicle-triggers-api.dimo.zone';
 
 		const executeOperation = webhooksReqs.get(operation);
 		if (!executeOperation) {

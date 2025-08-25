@@ -81,13 +81,13 @@ export const webhooksProperties: INodeProperties[] = [
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
-		default: 'Telemetry',
-		description: 'The service to register the webhook for. Default is Telemetry.',
+		default: 'telemetry.signals',
+		description: 'The service to register the webhook for. Default is telemetry.signals.',
 		required: true,
 	},
 	{
-		displayName: 'Data',
-		name: 'data',
+		displayName: 'Metric Name',
+		name: 'metricName',
 		type: 'options',
 		options: [
 			{
@@ -158,12 +158,12 @@ export const webhooksProperties: INodeProperties[] = [
 			},
 		},
 		default: 'powertrainTransmissionTravelledDistance',
-		description: 'The Telemetry field that the webhook will listen for events on',
+		description: 'The metric name that the webhook will listen for events on',
 		required: true,
 	},
 	{
-		displayName: 'Trigger',
-		name: 'trigger',
+		displayName: 'Condition',
+		name: 'condition',
 		type: 'string',
 		displayOptions: {
 			show: {
@@ -171,39 +171,22 @@ export const webhooksProperties: INodeProperties[] = [
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
-		default: 'valueNumber',
-		description: 'The trigger that the webhook will be listening for. You can use the following condition statements &gt;= , &lt;=, &gt;, &lt;, =.',
+		default: 'value > 0',
+		description: 'The condition that the webhook will be listening for. You can use the following condition statements &gt;= , &lt;=, &gt;, &lt;, =.',
 		required: true,
 	},
 	{
-		displayName: 'Setup',
-		name: 'setup',
-		type: 'options',
-		options: [
-			{
-				name: 'Realtime',
-				value: 'Realtime',
-				description: 'Continues firing as long as the condition remains true',
-			},
-			{
-				name: 'Hourly',
-				value: 'Hourly',
-				description: 'Fires every hour as long as the condition remains true',
-			},
-			{
-				name: 'Daily',
-				value: 'Daily',
-				description: 'Fires every day as long as the condition remains true',
-			},
-		],
+		displayName: 'Cool Down Period',
+		name: 'coolDownPeriod',
+		type: 'number',
 		displayOptions: {
 			show: {
 				resource: ['webhooks'],
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
-		default: 'Realtime',
-		description: 'How often the webhook should fire when conditions are met',
+		default: 30,
+		description: 'Number of seconds that must elapse before the webhook can be triggered again',
 		required: true,
 	},
 	{
@@ -221,8 +204,8 @@ export const webhooksProperties: INodeProperties[] = [
 		required: true,
 	},
 	{
-		displayName: 'Target URI',
-		name: 'targetUri',
+		displayName: 'Display Name',
+		name: 'displayName',
 		type: 'string',
 		displayOptions: {
 			show: {
@@ -231,12 +214,11 @@ export const webhooksProperties: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: 'The URI that the webhook will send the event to',
-		required: true,
+		description: 'A display name for the webhook (optional)',
 	},
 	{
-		displayName: 'Status',
-		name: 'status',
+		displayName: 'Target URL',
+		name: 'targetURL',
 		type: 'string',
 		displayOptions: {
 			show: {
@@ -244,15 +226,15 @@ export const webhooksProperties: INodeProperties[] = [
 				operation: ['registerWebhook', 'updateWebhook'],
 			},
 		},
-		default: 'Active',
-		description: 'The status of the webhook',
+		default: '',
+		description: 'The URL that the webhook will send the event to',
 		required: true,
 	},
 	{
 		displayName: 'Verification Token',
 		name: 'verificationToken',
+		// eslint-disable-next-line n8n-nodes-base/node-param-type-options-password-missing
 		type: 'string',
-		typeOptions: { password: true },
 		displayOptions: {
 			show: {
 				resource: ['webhooks'],
@@ -260,7 +242,33 @@ export const webhooksProperties: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: 'The plain/text string that must be returned by your target_uri webhook listener',
+		description: 'The plain/text string that must be returned by your target URL webhook listener',
+		required: true,
+	},
+	{
+		displayName: 'Status',
+		name: 'status',
+		type: 'options',
+		options: [
+			{
+				name: 'Enabled',
+				value: 'enabled',
+				description: 'Webhook is active and will trigger',
+			},
+			{
+				name: 'Disabled',
+				value: 'disabled',
+				description: 'Webhook is inactive and will not trigger',
+			},
+		],
+		displayOptions: {
+			show: {
+				resource: ['webhooks'],
+				operation: ['registerWebhook', 'updateWebhook'],
+			},
+		},
+		default: 'enabled',
+		description: 'The status of the webhook',
 		required: true,
 	},
 	{
@@ -278,17 +286,18 @@ export const webhooksProperties: INodeProperties[] = [
 		required: true,
 	},
 	{
-		displayName: 'Token ID',
-		name: 'tokenId',
-		type: 'number',
+		displayName: 'Token DID',
+		name: 'tokenDid',
+		// eslint-disable-next-line n8n-nodes-base/node-param-type-options-password-missing
+		type: 'string',
 		displayOptions: {
 			show: {
 				resource: ['webhooks'],
 				operation: ['subscribeVehicleToWebhook', 'unsubscribeVehicleFromWebhook', 'getVehicleWebhookSubscriptions'],
 			},
 		},
-		default: 0,
-		description: 'The Token ID of the vehicle for the webhook subscription',
+		default: '',
+		description: 'The Token DID of the vehicle for the webhook subscription',
 		required: true,
 	},
 ];
