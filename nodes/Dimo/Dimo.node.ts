@@ -7,6 +7,8 @@ import {
 } from 'n8n-workflow';
 import { DimoHelper, DimoApiCredentials } from './DimoHelper';
 
+import { agents } from './operations/Agents';
+import { agentsDescription } from './descriptions/AgentsDescription';
 import { authentication } from './operations/Authentication';
 import { authenticationDescription } from './descriptions/AuthDescription';
 import { attestation } from './operations/Attestation';
@@ -25,6 +27,7 @@ import { webhooks } from './operations/Webhooks';
 import { webhooksDescription } from './descriptions/WebhooksDescription';
 
 const resourceOperations = new Map([
+	['agents', agents.execute],
 	['authentication', authentication.execute],
 	['attestation', attestation.execute],
 	['devicedefinitions', devicedefinitions.execute],
@@ -82,6 +85,10 @@ export class Dimo implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
+						name: 'Agents API',
+						value: 'agents',
+					},
+					{
 						name: 'Attestation API',
 						value: 'attestation',
 					},
@@ -116,6 +123,9 @@ export class Dimo implements INodeType {
 				],
 				default: 'attestation',
 			},
+			// Agents Options
+			agentsDescription.operations,
+			...agentsDescription.properties,
 			// Authentication Options
 			authenticationDescription.operations,
 			...authenticationDescription.properties,
