@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-dimo-api",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "DIMO API Integration for n8n",
   "keywords": [
     "n8n-community-node-package"
@@ -47,7 +47,7 @@
     "eslint": "^8.56.0",
     "eslint-plugin-n8n-nodes-base": "^1.16.1",
     "gulp": "^4.0.2",
-    "n8n-workflow": "*",
+    "n8n-workflow": "^2.1.0",
     "prettier": "^3.3.2",
     "typescript": "^5.5.3"
   },
