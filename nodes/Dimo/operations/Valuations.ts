@@ -60,6 +60,6 @@ export const valuations = {
 			throw new Error(`The operation ${operation} is not supported.`);
 		}
 
-		return executeOperation(helper, tokenId, vehicleJwt, basePath);;
+		return executeOperation(helper, tokenId, vehicleJwt, basePath);
 	},
 };

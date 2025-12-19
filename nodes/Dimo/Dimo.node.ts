@@ -150,6 +150,9 @@ export class Dimo implements INodeType {
 			const credentials = (await this.getCredentials('dimoApi')) as unknown as DimoApiCredentials;
 			const operation = this.getNodeParameter('operation', 0) as string;
 			const resource = this.getNodeParameter('resource', 0);
+
+			console.log('[DIMO Node] Executing operation:', { resource, operation });
+
 			const helper = new DimoHelper(this, credentials);
 
 			const executeOperation = resourceOperations.get(resource);
@@ -158,11 +161,28 @@ export class Dimo implements INodeType {
 			}
 
 			const result = await executeOperation(helper, operation);
+			console.log('[DIMO Node] Operation completed successfully');
 			returnData.push({ json: result });
 			return [returnData];
-		} catch (error) {
+		} catch (error: any) {
+			console.error('[DIMO Node] Error caught:', {
+				name: error.name,
+				message: error.message,
+				status: error.response?.status || error.statusCode,
+				responseData: error.response?.data || error.response?.body,
+				hasResponse: !!error.response,
+			});
+
 			if (error.response) {
-				throw new NodeOperationError(this.getNode(), `DIMO API Error: ${error}`);
+				const errorData = error.response.data || error.response.body || error.response;
+				const errorMessage = typeof errorData === 'string'
+					? errorData
+					: JSON.stringify(errorData);
+
+				throw new NodeOperationError(
+					this.getNode(),
+					`DIMO API Error (${error.response.status || error.statusCode}): ${errorMessage}`
+				);
 			}
 			throw error;
 		}

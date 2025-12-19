@@ -6,7 +6,7 @@
     "n8n-community-node-package"
   ],
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://github.com/DIMO-Network/dimo-n8n",
   "author": {
     "name": "Barrett Kowalsky",
     "email": "barrett@dimo.org"
@@ -36,10 +36,10 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/DimoApi.credentials.ts"
+      "dist/credentials/DimoApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/Dimo/Dimo.node.ts"
+      "dist/nodes/Dimo/Dimo.node.js"
     ]
   },
   "devDependencies": {
@@ -51,10 +51,7 @@
     "prettier": "^3.3.2",
     "typescript": "^5.5.3"
   },
-  "peerDependencies": {
-    "n8n-workflow": "*"
-  },
-  "dependencies": {
-    "ethers": "^6.13.4"
-  }
+	"peerDependencies": {
+		"n8n-workflow": "*"
+	}
 }

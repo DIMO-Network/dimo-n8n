@@ -117,7 +117,7 @@ export const deviceDefinitionsProperties: INodeProperties[] = [
 			},
 		},
 		default: '',
-		description: 'Page number (for pagniation, defaults to the first page)',
+		description: 'Page number (for pagination, defaults to the first page)',
 	},
 	{
 		displayName: 'Page Size',
